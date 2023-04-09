@@ -2,10 +2,13 @@ package com.mei.serviceprovider.country.controller;
 
 import com.mei.serviceprovider.country.model.CountryDto;
 import com.mei.serviceprovider.country.service.CountryService;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,23 +23,23 @@ public class CountryController {
     CountryService countryService;
 
     @PostMapping
-    public CountryDto createCountry(@RequestBody CountryDto country) {
-        return countryService.createCountry(country);
+    public ResponseEntity<CountryDto> createCountry(@Valid @RequestBody CountryDto country) {
+        return new ResponseEntity<>(countryService.createCountry(country), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public List<CountryDto> list() {
-        return countryService.list();
+    public ResponseEntity<List<CountryDto>> list() {
+        return new ResponseEntity<>(countryService.list(), HttpStatus.OK);
     }
 
     @GetMapping(path = "/{id}")
-    public CountryDto findById(@PathVariable UUID id) {
-        return countryService.findById(id);
+    public ResponseEntity<CountryDto> findById(@PathVariable UUID id) {
+        return new ResponseEntity<>(countryService.findById(id), HttpStatus.OK);
     }
 
     @PutMapping(path = "/{id}")
-    public CountryDto update(@PathVariable UUID id, @RequestBody CountryDto country) {
-        return countryService.updateCountry(id, country);
+    public ResponseEntity<CountryDto> update(@PathVariable UUID id, @Valid @RequestBody CountryDto country) {
+        return new ResponseEntity<>(countryService.updateCountry(id, country), HttpStatus.OK);
     }
 
 }

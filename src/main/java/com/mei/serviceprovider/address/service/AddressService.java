@@ -1,7 +1,7 @@
-package com.mei.serviceprovider.city.service;
+package com.mei.serviceprovider.address.service;
 
-import com.mei.serviceprovider.city.model.CityDto;
-import com.mei.serviceprovider.city.model.CityEntity;
+import com.mei.serviceprovider.address.model.AddressDto;
+import com.mei.serviceprovider.address.model.AddressEntity;
 import com.mei.serviceprovider.common.constants.TranslationConstants;
 import com.mei.serviceprovider.common.validation.HandleException;
 import lombok.AccessLevel;
@@ -21,37 +21,38 @@ import java.util.stream.Collectors;
 @Service
 @Setter(onMethod_ = @Autowired)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CityService {
+public class AddressService {
 
-    CityRepository cityRepository;
+    AddressRepository addressRepository;
     ModelMapper modelMapper;
     MessageSource messageSource;
 
-    public CityDto createCity(CityDto cityDto) {
-        CityEntity cityEntity = modelMapper.map(cityDto, CityEntity.class);
-        cityEntity = cityRepository.saveAndFlush(cityEntity);
-        cityDto.setId(cityEntity.getId());
-        return cityDto;
+    public AddressDto createAddress(AddressDto addressDto) {
+        AddressEntity addressEntity = modelMapper.map(addressDto, AddressEntity.class);
+        addressEntity = addressRepository.saveAndFlush(addressEntity);
+        addressDto.setId(addressEntity.getId());
+        return addressDto;
     }
 
-    public List<CityDto> list() {
-        return cityRepository.findAll().stream() //
-                .map(entity -> modelMapper.map(entity, CityDto.class)) //
+    public List<AddressDto> list() {
+        return addressRepository.findAll().stream() //
+                .map(entity -> modelMapper.map(entity, AddressDto.class)) //
                 .collect(Collectors.toList());
     }
 
-    public CityDto findById(UUID id) {
-        return cityRepository.findById(id) //
-                .map(entity -> modelMapper.map(entity, CityDto.class)) //
+    public AddressDto findById(UUID id) {
+        return addressRepository.findById(id) //
+                .map(entity -> modelMapper.map(entity, AddressDto.class)) //
                 .orElseThrow(this::notFoundError);
     }
 
-    public CityDto updateCity(UUID id, CityDto city) {
-        return cityRepository.findById(id) //
+    public AddressDto updateAddress(UUID id, AddressDto address) {
+        return addressRepository.findById(id) //
                 .map(entity -> {
-                    modelMapper.map(city, entity);
-                    cityRepository.saveAndFlush(entity);
-                    return city;
+                    modelMapper.map(address, entity);
+                    entity.setId(id);
+                    addressRepository.saveAndFlush(entity);
+                    return address;
                 }) //
                 .orElseThrow(this::notFoundError);
     }
@@ -59,7 +60,7 @@ public class CityService {
     private HandleException notFoundError() {
         return new HandleException( //
                 messageSource.getMessage( //
-                        TranslationConstants.ERROR_CITY_NOT_FOUND, //
+                        TranslationConstants.ERROR_ADDRESS_NOT_FOUND, //
                         null, //
                         Locale.getDefault() //
                 ), //

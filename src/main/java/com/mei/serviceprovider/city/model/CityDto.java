@@ -9,9 +9,6 @@ import lombok.experimental.FieldDefaults;
 
 import java.util.UUID;
 
-import static com.mei.serviceprovider.common.constants.TranslationConstants.VALIDATION_CITY_NAME_IS_REQUIRED;
-import static com.mei.serviceprovider.common.constants.TranslationConstants.VALIDATION_CITY_STATE_IS_REQUIRED;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -21,11 +18,12 @@ public class CityDto {
 
     UUID id;
 
-    @NotEmpty(message = VALIDATION_CITY_NAME_IS_REQUIRED)
-    @Size(min = 2, message = "O nome deve ter no máximo 150 caracteres")
+    @NotEmpty
+    @NotNull
+    @Size(max = 150)
     String name;
 
-    @NotNull(message = VALIDATION_CITY_STATE_IS_REQUIRED)
+    @NotNull
     StateDto state;
 
 }

@@ -31,7 +31,7 @@ public class StateEntity implements Persistable<UUID> {
     @Column(nullable = false, name = "name", length = 150)
     String name;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn( //
             name = "country", //
             nullable = false, //

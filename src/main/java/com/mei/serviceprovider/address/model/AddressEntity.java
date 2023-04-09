@@ -1,6 +1,6 @@
-package com.mei.serviceprovider.city.model;
+package com.mei.serviceprovider.address.model;
 
-import com.mei.serviceprovider.state.model.StateEntity;
+import com.mei.serviceprovider.city.model.CityEntity;
 import com.mei.serviceprovider.common.constants.TranslationConstants;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,10 +15,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "city", uniqueConstraints = { //
-        @UniqueConstraint(name = TranslationConstants.UK_CITY_NAME, columnNames = {"name"}) //
-})
-public class CityEntity implements Persistable<UUID> {
+@Table(name = "address")
+public class AddressEntity implements Persistable<UUID> {
 
     @Id
     @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
@@ -26,16 +24,24 @@ public class CityEntity implements Persistable<UUID> {
     @Column(name = "id", updatable = false, nullable = false)
     UUID id;
 
-    @Column(nullable = false, name = "name", length = 150)
-    String name;
+    @Column(nullable = false, length = 8)
+    String cep;
+    @Column(nullable = false)
+    String neighborhood;
+    @Column(nullable = false)
+    String street;
+    @Column(nullable = false)
+    Integer houseNumber;
+    @Column
+    String complement;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn( //
-            name = "state", //
+            name = "city", //
             nullable = false, //
-            foreignKey = @ForeignKey(name = TranslationConstants.FK_CITY_STATE_ID) //
+            foreignKey = @ForeignKey(name = TranslationConstants.FK_ADDRESS_CITY) //
     )
-    StateEntity state;
+    CityEntity city;
 
     @Override
     public boolean isNew() {

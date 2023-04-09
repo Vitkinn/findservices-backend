@@ -1,17 +1,21 @@
 package com.mei.serviceprovider.country.service;
 
 
+import com.mei.serviceprovider.common.constants.TranslationConstants;
+import com.mei.serviceprovider.common.validation.HandleException;
 import com.mei.serviceprovider.country.model.CountryDto;
-import com.mei.serviceprovider.country.model.CountryDtoConverter;
 import com.mei.serviceprovider.country.model.CountryEntity;
 import lombok.AccessLevel;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
-import org.hibernate.service.spi.ServiceException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -21,35 +25,47 @@ import java.util.stream.Collectors;
 public class CountryService {
 
     CountryRepository countryRepository;
-    CountryDtoConverter countryDtoConverter;
+    ModelMapper modelMapper;
+    MessageSource messageSource;
 
     public CountryDto createCountry(CountryDto countryDto) {
-        CountryEntity countryEntity = new CountryEntity();
-        countryEntity.setName(countryDto.getName());
+        CountryEntity countryEntity = modelMapper.map(countryDto, CountryEntity.class);
         countryEntity = countryRepository.saveAndFlush(countryEntity);
         countryDto.setId(countryEntity.getId());
         return countryDto;
     }
 
     public List<CountryDto> list() {
-        return countryRepository.findAll().stream()
-                .map(countryDtoConverter::toDto)
+        return countryRepository.findAll().stream() //
+                .map(entity -> modelMapper.map(entity, CountryDto.class)) //
                 .collect(Collectors.toList());
     }
 
     public CountryDto findById(UUID id) {
-        return countryRepository.findById(id)
-                .map(countryDtoConverter::toDto)
-                .orElseThrow(() -> new ServiceException("not found"));
+        return countryRepository.findById(id) //
+                .map(entity -> modelMapper.map(entity, CountryDto.class)) //
+                .orElseThrow(this::notFoundError);
     }
 
     public CountryDto updateCountry(UUID id, CountryDto country) {
-        return countryRepository.findById(id)
+        return countryRepository.findById(id) //
                 .map(entity -> {
-                    entity.setName(country.getName());
+                    modelMapper.map(country, entity);
+                    entity.setId(id);
                     return countryRepository.saveAndFlush(entity);
                 })
-                .map(countryDtoConverter::toDto)
-                .orElseThrow(() -> new ServiceException("not found"));
+                .map(entity -> modelMapper.map(entity, CountryDto.class)) //
+                .orElseThrow(this::notFoundError);
+    }
+
+    private HandleException notFoundError() {
+        return new HandleException( //
+                messageSource.getMessage( //
+                        TranslationConstants.ERROR_COUNTRY_NOT_FOUND, //
+                        null, //
+                        Locale.getDefault() //
+                ), //
+                HttpStatus.NOT_FOUND //
+        );
     }
 }

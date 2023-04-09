@@ -7,6 +7,8 @@ import lombok.AccessLevel;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,22 +23,22 @@ public class CityController {
     CityService cityService;
 
     @PostMapping
-    public CityDto createCity(@Valid @RequestBody CityDto city) {
-        return cityService.createCity(city);
+    public ResponseEntity<CityDto> createCity(@Valid @RequestBody CityDto city) {
+        return new ResponseEntity<>(cityService.createCity(city), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public List<CityDto> list() {
-        return cityService.list();
+    public ResponseEntity<List<CityDto>> list() {
+        return new ResponseEntity<>(cityService.list(), HttpStatus.OK);
     }
 
     @GetMapping(path = "/{id}")
-    public CityDto findById(@PathVariable UUID id) {
-        return cityService.findById(id);
+    public ResponseEntity<CityDto> findById(@PathVariable UUID id) {
+        return new ResponseEntity<>(cityService.findById(id), HttpStatus.OK);
     }
 
     @PutMapping(path = "/{id}")
-    public CityDto update(@PathVariable UUID id, @RequestBody CityDto country) {
-        return cityService.updateCity(id, country);
+    public ResponseEntity<CityDto> update(@PathVariable UUID id, @Valid @RequestBody CityDto country) {
+        return new ResponseEntity<>(cityService.updateCity(id, country), HttpStatus.OK);
     }
 }
