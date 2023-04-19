@@ -2,6 +2,7 @@ package com.findservices.serviceprovider.address.model;
 
 import com.findservices.serviceprovider.city.model.CityEntity;
 import com.findservices.serviceprovider.common.constants.TranslationConstants;
+import com.findservices.serviceprovider.common.model.BaseDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
@@ -17,9 +18,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AddressDto {
-
-    UUID id;
+public class AddressDto extends BaseDto {
 
     @NotEmpty
     @NotNull

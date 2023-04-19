@@ -1,7 +1,7 @@
 package com.findservices.serviceprovider.city.service;
 
-import com.findservices.serviceprovider.city.model.CityEntity;
 import com.findservices.serviceprovider.city.model.CityDto;
+import com.findservices.serviceprovider.city.model.CityEntity;
 import com.findservices.serviceprovider.common.constants.TranslationConstants;
 import com.findservices.serviceprovider.common.validation.HandleException;
 import lombok.AccessLevel;
@@ -47,13 +47,14 @@ public class CityService {
     }
 
     public CityDto updateCity(UUID id, CityDto city) {
-        return cityRepository.findById(id) //
-                .map(entity -> {
-                    modelMapper.map(city, entity);
-                    cityRepository.saveAndFlush(entity);
-                    return city;
-                }) //
-                .orElseThrow(this::notFoundError);
+        if (!cityRepository.existsById(id)) {
+            throw notFoundError();
+        } else {
+            city.setId(id);
+            CityEntity entity = modelMapper.map(city, CityEntity.class);
+            cityRepository.saveAndFlush(entity);
+            return city;
+        }
     }
 
     private HandleException notFoundError() {

@@ -1,5 +1,8 @@
 package com.findservices.serviceprovider.state.service;
 
+import com.findservices.serviceprovider.common.model.BaseDto;
+import com.findservices.serviceprovider.common.model.BaseEntity;
+import com.findservices.serviceprovider.country.model.CountryEntity;
 import com.findservices.serviceprovider.state.model.StateDto;
 import com.findservices.serviceprovider.common.constants.TranslationConstants;
 import com.findservices.serviceprovider.common.validation.HandleException;
@@ -8,6 +11,7 @@ import lombok.AccessLevel;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
@@ -52,14 +56,14 @@ public class StateService {
 
     @Transactional
     public StateDto updateState(UUID id, StateDto state) {
-        return stateRepository.findById(id)
-                .map(entity -> { //
-                    mapper.map(state, entity);
-                    entity.setId(id);
-                    return stateRepository.saveAndFlush(entity);
-                }) //
-                .map(entity -> mapper.map(entity, StateDto.class)) //
-                .orElseThrow(this::notFoundError);
+        if (!stateRepository.existsById(id)) {
+            throw notFoundError();
+        } else {
+            state.setId(id);
+            StateEntity entity = mapper.map(state, StateEntity.class);
+            stateRepository.saveAndFlush(entity);
+            return state;
+        }
     }
 
     private HandleException notFoundError() {

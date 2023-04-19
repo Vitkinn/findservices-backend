@@ -1,5 +1,6 @@
 package com.findservices.serviceprovider.country.model;
 
+import com.findservices.serviceprovider.common.model.BaseDto;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -13,9 +14,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CountryDto {
-
-    UUID id;
+public class CountryDto extends BaseDto {
 
     @NotEmpty
     @NotNull

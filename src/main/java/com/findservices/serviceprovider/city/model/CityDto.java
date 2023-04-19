@@ -1,5 +1,6 @@
 package com.findservices.serviceprovider.city.model;
 
+import com.findservices.serviceprovider.common.model.BaseDto;
 import com.findservices.serviceprovider.state.model.StateDto;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -14,9 +15,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CityDto {
-
-    UUID id;
+public class CityDto extends BaseDto {
 
     @NotEmpty
     @NotNull

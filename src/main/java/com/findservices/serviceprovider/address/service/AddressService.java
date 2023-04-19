@@ -2,6 +2,7 @@ package com.findservices.serviceprovider.address.service;
 
 import com.findservices.serviceprovider.address.model.AddressDto;
 import com.findservices.serviceprovider.address.model.AddressEntity;
+import com.findservices.serviceprovider.address.model.AddressEntity;
 import com.findservices.serviceprovider.common.validation.HandleException;
 import com.findservices.serviceprovider.common.constants.TranslationConstants;
 import lombok.AccessLevel;
@@ -47,14 +48,14 @@ public class AddressService {
     }
 
     public AddressDto updateAddress(UUID id, AddressDto address) {
-        return addressRepository.findById(id) //
-                .map(entity -> {
-                    modelMapper.map(address, entity);
-                    entity.setId(id);
-                    addressRepository.saveAndFlush(entity);
-                    return address;
-                }) //
-                .orElseThrow(this::notFoundError);
+        if (!addressRepository.existsById(id)) {
+            throw notFoundError();
+        } else {
+            address.setId(id);
+            AddressEntity entity = modelMapper.map(address, AddressEntity.class);
+            addressRepository.saveAndFlush(entity);
+            return address;
+        }
     }
 
     private HandleException notFoundError() {

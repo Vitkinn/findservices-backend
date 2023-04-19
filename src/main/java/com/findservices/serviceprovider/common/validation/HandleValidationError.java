@@ -7,6 +7,7 @@ import lombok.experimental.FieldDefaults;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -45,13 +46,13 @@ public class HandleValidationError extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(apiError, headers, status);
     }
 
-    @ExceptionHandler({ConstraintViolationException.class})
+    @ExceptionHandler({ConstraintViolationException.class, DataIntegrityViolationException.class})
     public ResponseEntity<ApiError> constraintViolateException(ConstraintViolationException ex, WebRequest request) {
 
         final ApiError apiError = ApiError.builder() //
                 .message(ex.getMessage()) //
                 .errors(Set.of(messageSource.getMessage(ex.getConstraintName(), null, Locale.getDefault()))) //
-                .status(HttpStatus.CONFLICT) //
+                .status(ex.getConstraintName().contains("fk") ? HttpStatus.BAD_REQUEST : HttpStatus.CONFLICT) //
                 .build();
 
         return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());

@@ -48,14 +48,14 @@ public class CountryService {
     }
 
     public CountryDto updateCountry(UUID id, CountryDto country) {
-        return countryRepository.findById(id) //
-                .map(entity -> {
-                    modelMapper.map(country, entity);
-                    entity.setId(id);
-                    return countryRepository.saveAndFlush(entity);
-                })
-                .map(entity -> modelMapper.map(entity, CountryDto.class)) //
-                .orElseThrow(this::notFoundError);
+        if (!countryRepository.existsById(id)) {
+            throw notFoundError();
+        } else {
+            country.setId(id);
+            CountryEntity entity = modelMapper.map(country, CountryEntity.class);
+            countryRepository.saveAndFlush(entity);
+            return country;
+        }
     }
 
     private HandleException notFoundError() {
