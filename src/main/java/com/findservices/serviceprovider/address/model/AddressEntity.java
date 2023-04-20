@@ -2,7 +2,6 @@ package com.findservices.serviceprovider.address.model;
 
 import com.findservices.serviceprovider.city.model.CityEntity;
 import com.findservices.serviceprovider.common.constants.TranslationConstants;
-import com.findservices.serviceprovider.common.model.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,7 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Entity
 @Table(name = "address")
-public class AddressEntity extends BaseEntity implements Persistable<UUID> {
+public class AddressEntity implements Persistable<UUID> {
 
     @Id
     @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")

@@ -1,0 +1,11 @@
+package com.findservices.serviceprovider.serviceprovider.service;
+
+import com.findservices.serviceprovider.serviceprovider.model.ServiceProviderEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.UUID;
+
+@Repository
+public interface ServiceProviderRepository extends JpaRepository<ServiceProviderEntity, UUID> {
+}

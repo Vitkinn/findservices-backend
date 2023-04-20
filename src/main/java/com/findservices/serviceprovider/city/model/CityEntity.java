@@ -1,8 +1,7 @@
 package com.findservices.serviceprovider.city.model;
 
-import com.findservices.serviceprovider.common.model.BaseEntity;
-import com.findservices.serviceprovider.state.model.StateEntity;
 import com.findservices.serviceprovider.common.constants.TranslationConstants;
+import com.findservices.serviceprovider.state.model.StateEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,7 +18,7 @@ import java.util.UUID;
 @Table(name = "city", uniqueConstraints = { //
         @UniqueConstraint(name = TranslationConstants.UK_CITY_NAME, columnNames = {"name"}) //
 })
-public class CityEntity extends BaseEntity implements Persistable<UUID> {
+public class CityEntity implements Persistable<UUID> {
 
     @Id
     @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")

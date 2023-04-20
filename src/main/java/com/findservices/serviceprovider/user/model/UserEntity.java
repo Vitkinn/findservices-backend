@@ -1,6 +1,6 @@
-package com.findservices.serviceprovider.state.model;
+package com.findservices.serviceprovider.user.model;
 
-import com.findservices.serviceprovider.country.model.CountryEntity;
+import com.findservices.serviceprovider.address.model.AddressEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,17 +10,14 @@ import org.springframework.data.domain.Persistable;
 
 import java.util.UUID;
 
-import static com.findservices.serviceprovider.common.constants.TranslationConstants.FK_STATE_COUNTRY_ID;
-import static com.findservices.serviceprovider.common.constants.TranslationConstants.UK_STATE_NAME;
+import static com.findservices.serviceprovider.common.constants.TranslationConstants.FK_USER_ADDRESS_ID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "state", uniqueConstraints = { //
-        @UniqueConstraint(name = UK_STATE_NAME, columnNames = {"name"}) //
-})
-public class StateEntity implements Persistable<UUID> {
+@Table(name = "user")
+public class UserEntity implements Persistable<UUID> {
 
     @Id
     @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
@@ -31,13 +28,22 @@ public class StateEntity implements Persistable<UUID> {
     @Column(nullable = false, name = "name", length = 150)
     String name;
 
+    @Column(nullable = false, name = "last_name", length = 11)
+    String lastName;
+
+    @Column(name = "user_photo_url", length = 300)
+    String userPhotoUrl;
+
+    @Column(name = "cpf", length = 11)
+    String cpf;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn( //
-            name = "country", //
+            name = "address", //
             nullable = false, //
-            foreignKey = @ForeignKey(name = FK_STATE_COUNTRY_ID) //
+            foreignKey = @ForeignKey(name = FK_USER_ADDRESS_ID) //
     )
-    CountryEntity country;
+    AddressEntity address;
 
     @Override
     public boolean isNew() {

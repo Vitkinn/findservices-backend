@@ -1,9 +1,9 @@
-package com.findservices.serviceprovider.state.service;
+package com.findservices.serviceprovider.user.service;
 
 import com.findservices.serviceprovider.common.constants.TranslationConstants;
 import com.findservices.serviceprovider.common.validation.HandleException;
-import com.findservices.serviceprovider.state.model.StateDto;
-import com.findservices.serviceprovider.state.model.StateEntity;
+import com.findservices.serviceprovider.user.model.UserDto;
+import com.findservices.serviceprovider.user.model.UserEntity;
 import lombok.AccessLevel;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
@@ -22,50 +22,50 @@ import java.util.stream.Collectors;
 @Service
 @Setter(onMethod_ = @Autowired)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class StateService {
+public class UserService {
 
-    StateRepository stateRepository;
+    UserRepository userRepository;
 
     ModelMapper mapper;
 
     MessageSource messageSource;
 
     @Transactional
-    public StateDto createState(StateDto stateDto) {
-        StateEntity stateEntity = mapper.map(stateDto, StateEntity.class);
-        stateEntity = stateRepository.saveAndFlush(stateEntity);
-        stateDto.setId(stateEntity.getId());
-        return stateDto;
+    public UserDto createUser(UserDto userDto) {
+        UserEntity userEntity = mapper.map(userDto, UserEntity.class);
+        userEntity = userRepository.saveAndFlush(userEntity);
+        userDto.setId(userEntity.getId());
+        return userDto;
     }
 
-    public List<StateDto> list() {
-        return stateRepository.findAll().stream() //
-                .map(entity -> mapper.map(entity, StateDto.class)) //
+    public List<UserDto> list() {
+        return userRepository.findAll().stream() //
+                .map(entity -> mapper.map(entity, UserDto.class)) //
                 .collect(Collectors.toList());
     }
 
-    public StateDto findById(UUID id) {
-        return stateRepository.findById(id) //
-                .map(entity -> mapper.map(entity, StateDto.class)) //
+    public UserDto findById(UUID id) {
+        return userRepository.findById(id) //
+                .map(entity -> mapper.map(entity, UserDto.class)) //
                 .orElseThrow(this::notFoundError);
     }
 
     @Transactional
-    public StateDto updateState(UUID id, StateDto state) {
-        if (!stateRepository.existsById(id)) {
+    public UserDto updateUser(UUID id, UserDto user) {
+        if (!userRepository.existsById(id)) {
             throw notFoundError();
         } else {
-            state.setId(id);
-            StateEntity entity = mapper.map(state, StateEntity.class);
-            stateRepository.saveAndFlush(entity);
-            return state;
+            user.setId(id);
+            UserEntity entity = mapper.map(user, UserEntity.class);
+            userRepository.saveAndFlush(entity);
+            return user;
         }
     }
 
     private HandleException notFoundError() {
         return new HandleException( //
                 messageSource.getMessage( //
-                        TranslationConstants.ERROR_STATE_NOT_FOUND, //
+                        TranslationConstants.ERROR_USER_NOT_FOUND, //
                         null, //
                         Locale.getDefault() //
                 ), //
