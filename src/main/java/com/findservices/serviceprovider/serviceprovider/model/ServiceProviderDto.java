@@ -1,12 +1,14 @@
 package com.findservices.serviceprovider.serviceprovider.model;
 
-import com.findservices.serviceprovider.address.model.AddressDto;
 import com.findservices.serviceprovider.common.model.BaseDto;
+import com.findservices.serviceprovider.common.model.IdDto;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,22 +19,14 @@ public class ServiceProviderDto extends BaseDto {
 
     @NotEmpty
     @NotNull
-    @Size(max = 150)
-    String name;
+    @Size(max = 14, message = "max")
+    @Size(min = 14, message = "min")
+    String cnpj;
 
     @NotEmpty
     @NotNull
-    @Size(max = 255)
-    String lastName;
-
-    @Size(max = 255)
-    String userPhotoUrl;
+    List<IdDto> actuationCities;
 
     @NotNull
-    @NotEmpty
-    @Size(max = 11, min = 11)
-    String cpf;
-
-    AddressDto address;
-
+    IdDto user;
 }

@@ -12,4 +12,5 @@ public abstract class BaseDto implements Serializable {
 
     protected UUID id;
 
+    public BaseDto() {}
 }

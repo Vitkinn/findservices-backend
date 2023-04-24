@@ -1,9 +1,13 @@
 package com.findservices.serviceprovider.address.model;
 
+import com.findservices.serviceprovider.city.model.CityDto;
 import com.findservices.serviceprovider.city.model.CityEntity;
 import com.findservices.serviceprovider.common.constants.TranslationConstants;
 import com.findservices.serviceprovider.common.model.BaseDto;
+import com.findservices.serviceprovider.common.model.IdDto;
+import com.findservices.serviceprovider.user.model.UserDto;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -42,12 +46,12 @@ public class AddressDto extends BaseDto {
     @Size(max = 255)
     String complement;
 
-    @ManyToOne
-    @JoinColumn( //
-            name = "city", //
-            nullable = false, //
-            foreignKey = @ForeignKey(name = TranslationConstants.FK_ADDRESS_CITY) //
-    )
-    CityEntity city;
+    @Valid
+    @NotNull
+    IdDto city;
+
+    @Valid
+    @NotNull
+    IdDto user;
 
 }

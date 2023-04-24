@@ -2,6 +2,7 @@ package com.findservices.serviceprovider.address.model;
 
 import com.findservices.serviceprovider.city.model.CityEntity;
 import com.findservices.serviceprovider.common.constants.TranslationConstants;
+import com.findservices.serviceprovider.user.model.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -42,6 +43,14 @@ public class AddressEntity implements Persistable<UUID> {
             foreignKey = @ForeignKey(name = TranslationConstants.FK_ADDRESS_CITY) //
     )
     CityEntity city;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn( //
+            nullable = false, //
+            updatable = false, //
+            foreignKey = @ForeignKey(name = TranslationConstants.FK_ADDRESS_USER) //
+    )
+    UserEntity user;
 
     @Override
     public boolean isNew() {

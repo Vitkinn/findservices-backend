@@ -14,9 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Locale;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,6 +31,7 @@ public class UserService {
     @Transactional
     public UserDto createUser(UserDto userDto) {
         UserEntity userEntity = mapper.map(userDto, UserEntity.class);
+        userEntity.setAddress(new ArrayList<>());
         userEntity = userRepository.saveAndFlush(userEntity);
         userDto.setId(userEntity.getId());
         return userDto;
@@ -48,6 +47,10 @@ public class UserService {
         return userRepository.findById(id) //
                 .map(entity -> mapper.map(entity, UserDto.class)) //
                 .orElseThrow(this::notFoundError);
+    }
+
+    public Optional<UserEntity> findEntityById(UUID id) {
+        return userRepository.findById(id);
     }
 
     @Transactional

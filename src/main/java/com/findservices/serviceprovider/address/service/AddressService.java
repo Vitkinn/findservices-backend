@@ -2,15 +2,18 @@ package com.findservices.serviceprovider.address.service;
 
 import com.findservices.serviceprovider.address.model.AddressDto;
 import com.findservices.serviceprovider.address.model.AddressEntity;
-import com.findservices.serviceprovider.address.model.AddressEntity;
-import com.findservices.serviceprovider.common.validation.HandleException;
 import com.findservices.serviceprovider.common.constants.TranslationConstants;
+import com.findservices.serviceprovider.common.validation.HandleException;
+import com.findservices.serviceprovider.user.model.UserEntity;
+import com.findservices.serviceprovider.user.service.UserService;
 import lombok.AccessLevel;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.exception.ConstraintViolationException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -27,9 +30,13 @@ public class AddressService {
     AddressRepository addressRepository;
     ModelMapper modelMapper;
     MessageSource messageSource;
+    UserService userService;
 
     public AddressDto createAddress(AddressDto addressDto) {
         AddressEntity addressEntity = modelMapper.map(addressDto, AddressEntity.class);
+        UserEntity userEntity = userService.findEntityById(addressDto.getUser().getId()) //
+                .orElseThrow(() -> new ConstraintViolationException(null, null, TranslationConstants.FK_ADDRESS_USER));
+        addressEntity.setUser(userEntity);
         addressEntity = addressRepository.saveAndFlush(addressEntity);
         addressDto.setId(addressEntity.getId());
         return addressDto;

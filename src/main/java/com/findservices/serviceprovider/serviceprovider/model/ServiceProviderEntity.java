@@ -21,24 +21,17 @@ import static com.findservices.serviceprovider.common.constants.TranslationConst
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "serviceProvider", uniqueConstraints = { //
+@Table(name = "service_provider", uniqueConstraints = { //
         @UniqueConstraint(name = UK_STATE_NAME, columnNames = {"cnpj"}) //
 })
 public class ServiceProviderEntity implements Persistable<UUID> {
 
     @Id
-    @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
-    @GeneratedValue(generator = "UUIDGenerator")
     @Column(name = "id", updatable = false, nullable = false)
     UUID id;
 
     @Column(nullable = false, name = "cnpj", length = 14)
     String cnpj;
-
-    @NotNull
-    @NotEmpty
-    @Size(max = 11, min = 11)
-    String cpf;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinColumn( //
@@ -48,12 +41,7 @@ public class ServiceProviderEntity implements Persistable<UUID> {
     )
     List<CityEntity> actuationCities;
 
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn( //
-            name = "user", //
-                        foreignKey = @ForeignKey(name = FK_SERVICE_PROVIDER_USER_ID) //
-    )
+    @OneToOne(mappedBy = "serviceProvider")
     UserEntity user;
 
     @Override

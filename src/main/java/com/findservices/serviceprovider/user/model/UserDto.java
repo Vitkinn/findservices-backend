@@ -8,6 +8,8 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -30,9 +32,7 @@ public class UserDto extends BaseDto {
 
     @NotNull
     @NotEmpty
-    @Size(max = 11, min = 11)
+    @Size(max = 11, message = "max")
+    @Size(min = 11, message = "min")
     String cpf;
-
-    AddressDto address;
-
 }

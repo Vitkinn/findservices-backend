@@ -20,6 +20,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -85,11 +86,21 @@ public class HandleValidationError extends ResponseEntityExceptionHandler {
                     new Object[]{error.getField()},  //
                     Locale.getDefault() //
             );
-            case "Size" -> messageSource.getMessage( //
-                    TranslationConstants.VALIDATION_GENERIC_MAX_SIZE_FIELD,  //
-                    new Object[]{error.getField(), error.getArguments()[1]},  //
-                    Locale.getDefault() //
-            );
+            case "Size" -> {
+                if (Objects.equals(error.getDefaultMessage(), "max")) {
+                    yield messageSource.getMessage( //
+                            TranslationConstants.VALIDATION_GENERIC_MAX_SIZE_FIELD,  //
+                            new Object[]{error.getField(), error.getArguments()[2]},  //
+                            Locale.getDefault() //
+                    );
+                } else {
+                    yield messageSource.getMessage( //
+                            TranslationConstants.VALIDATION_GENERIC_MIN_SIZE_FIELD,  //
+                            new Object[]{error.getField(), error.getArguments()[2]},  //
+                            Locale.getDefault() //
+                    );
+                }
+            }
             case "Min" -> messageSource.getMessage( //
                     TranslationConstants.VALIDATION_GENERIC_MIN_FIELD,  //
                     new Object[]{error.getField(), error.getArguments()[1]},  //
