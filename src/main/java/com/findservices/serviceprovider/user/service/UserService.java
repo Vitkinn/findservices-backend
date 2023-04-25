@@ -2,11 +2,14 @@ package com.findservices.serviceprovider.user.service;
 
 import com.findservices.serviceprovider.common.constants.TranslationConstants;
 import com.findservices.serviceprovider.common.validation.HandleException;
+import com.findservices.serviceprovider.serviceprovider.model.ServiceProviderDto;
+import com.findservices.serviceprovider.serviceprovider.model.ServiceProviderEntity;
 import com.findservices.serviceprovider.user.model.UserDto;
 import com.findservices.serviceprovider.user.model.UserEntity;
 import lombok.AccessLevel;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.exception.ConstraintViolationException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -35,6 +38,15 @@ public class UserService {
         userEntity = userRepository.saveAndFlush(userEntity);
         userDto.setId(userEntity.getId());
         return userDto;
+    }
+
+    public ServiceProviderEntity createServiceProvider(ServiceProviderEntity serviceProviderEntity) {
+        UserEntity user = this.userRepository.findById(serviceProviderEntity.getUser().getId()) //
+                .orElseThrow(() -> new ConstraintViolationException(null, null, TranslationConstants.FK_SERVICE_PROVIDER_USER_ID));
+
+        serviceProviderEntity.setId(user.getId());
+        userRepository.saveAndFlush(user);
+        return serviceProviderEntity;
     }
 
     public List<UserDto> list() {

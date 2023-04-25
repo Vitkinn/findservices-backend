@@ -22,7 +22,7 @@ import static com.findservices.serviceprovider.common.constants.TranslationConst
 @AllArgsConstructor
 @Entity
 @Table(name = "service_provider", uniqueConstraints = { //
-        @UniqueConstraint(name = UK_STATE_NAME, columnNames = {"cnpj"}) //
+        @UniqueConstraint(name = UK_SERVICE_PROVIDER_CNPJ, columnNames = {"cnpj"}) //
 })
 public class ServiceProviderEntity implements Persistable<UUID> {
 
@@ -42,6 +42,7 @@ public class ServiceProviderEntity implements Persistable<UUID> {
     List<CityEntity> actuationCities;
 
     @OneToOne(mappedBy = "serviceProvider")
+    @JoinColumn(updatable = false, insertable = false)
     UserEntity user;
 
     @Override
