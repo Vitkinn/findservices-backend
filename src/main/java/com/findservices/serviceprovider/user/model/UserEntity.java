@@ -43,7 +43,7 @@ public class UserEntity implements Persistable<UUID> {
     List<AddressEntity> address;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "id", updatable = false)
     ServiceProviderEntity serviceProvider;
 
     @Override
