@@ -25,4 +25,5 @@ public class TranslationConstants {
     public static final String ERROR_CITY_NOT_FOUND = "error_city_not_found";
     public static final String ERROR_ADDRESS_NOT_FOUND = "error_address_not_found";
     public static final String VALIDATION_GENERIC_MIN_FIELD = "validation_generic_min_field";
+    public static final String INVALID_OR_EXPIRED_TOKEN = "invalid_or_expired_token";
 }

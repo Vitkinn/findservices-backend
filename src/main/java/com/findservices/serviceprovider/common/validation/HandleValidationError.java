@@ -1,6 +1,7 @@
 package com.findservices.serviceprovider.common.validation;
 
 import com.findservices.serviceprovider.common.constants.TranslationConstants;
+import com.findservices.serviceprovider.login.exceptions.InvalidJwtAuthenticationException;
 import lombok.AccessLevel;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -19,9 +21,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.Locale;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Setter(onMethod_ = @Autowired)
@@ -69,6 +69,16 @@ public class HandleValidationError extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(apiError, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler(AccessDeniedException.class)
+    public final ResponseEntity<ApiError> accessDeniedException(AccessDeniedException ex, WebRequest request) {
+        ApiError apiError = ApiError.builder()
+                .status(HttpStatus.FORBIDDEN)
+                .message(ex.getMessage())
+                .build();
+
+        return new ResponseEntity<>(apiError, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     @ExceptionHandler(HandleException.class)
     public final ResponseEntity<ApiError> handleCustomExceptions(HandleException ex, WebRequest request) {
         ApiError error = ApiError.builder()
@@ -77,6 +87,19 @@ public class HandleValidationError extends ResponseEntityExceptionHandler {
                 .build();
 
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(InvalidJwtAuthenticationException.class)
+    public final ResponseEntity<ApiError> handleInvalidJwtAuthenticationExceptions(
+            Exception ex, WebRequest request) {
+
+        ApiError exceptionResponse = ApiError.builder()
+                .message(ex.getMessage())
+                .status(HttpStatus.FORBIDDEN)
+                .methodName(request.getContextPath())
+                .build();
+
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.FORBIDDEN);
     }
 
     private String formatErrorMessage(FieldError error) {
