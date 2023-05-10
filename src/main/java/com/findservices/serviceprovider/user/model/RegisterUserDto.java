@@ -1,21 +1,16 @@
 package com.findservices.serviceprovider.user.model;
 
-import com.findservices.serviceprovider.address.model.AddressDto;
 import com.findservices.serviceprovider.common.model.BaseDto;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserDto extends BaseDto {
+public class RegisterUserDto extends BaseDto {
 
     @NotEmpty
     @NotNull
@@ -31,8 +26,16 @@ public class UserDto extends BaseDto {
     String userPhotoUrl;
 
     @NotNull
-    @NotEmpty
     @Size(max = 11, message = "max")
     @Size(min = 11, message = "min")
     String cpf;
+
+    @NotNull
+    @Pattern(regexp = "(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}")
+    String password;
+
+    @NotNull
+    @Email
+    String login;
+
 }

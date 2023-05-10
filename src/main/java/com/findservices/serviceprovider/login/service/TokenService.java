@@ -24,7 +24,6 @@ public class TokenService {
         String token = JWT.create()
                 .withIssuer("serviceProvider")
                 .withSubject(login.getUsername())
-                .withClaim("id", login.getId().toString())
                 .withExpiresAt(expiresAt)
                 .sign(Algorithm.HMAC256(secretKey));
 
@@ -36,8 +35,10 @@ public class TokenService {
     }
 
     public String getSubject(String token) {
-        return JWT.require(Algorithm.HMAC256(secretKey))
-                .withIssuer("serviceProvider")
-                .build().verify(token).getSubject();
+        return JWT.require(Algorithm.HMAC256(secretKey)) //
+                .withIssuer("serviceProvider") //
+                .build() //
+                .verify(token) //
+                .getSubject();
     }
 }

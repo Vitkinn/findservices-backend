@@ -2,9 +2,9 @@ package com.findservices.serviceprovider.user.service;
 
 import com.findservices.serviceprovider.common.constants.TranslationConstants;
 import com.findservices.serviceprovider.common.validation.HandleException;
-import com.findservices.serviceprovider.serviceprovider.model.ServiceProviderDto;
+import com.findservices.serviceprovider.login.model.LoginEntity;
 import com.findservices.serviceprovider.serviceprovider.model.ServiceProviderEntity;
-import com.findservices.serviceprovider.user.model.UserDto;
+import com.findservices.serviceprovider.user.model.RegisterUserDto;
 import com.findservices.serviceprovider.user.model.UserEntity;
 import lombok.AccessLevel;
 import lombok.Setter;
@@ -14,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,13 +32,25 @@ public class UserService {
 
     MessageSource messageSource;
 
+    PasswordEncoder passwordEncoder;
+
     @Transactional
-    public UserDto createUser(UserDto userDto) {
-        UserEntity userEntity = mapper.map(userDto, UserEntity.class);
+    public RegisterUserDto createUser(RegisterUserDto registerUserDto) {
+        UserEntity userEntity = mapper.map(registerUserDto, UserEntity.class);
         userEntity.setAddress(new ArrayList<>());
+
+        String encryptedPassword = passwordEncoder.encode(registerUserDto.getPassword());
+
+        LoginEntity loginEntity = new LoginEntity();
+        loginEntity.setUser(userEntity);
+        loginEntity.setPassword(encryptedPassword);
+        loginEntity.setUsername(registerUserDto.getLogin());
+
+        userEntity.setLogin(loginEntity);
+
         userEntity = userRepository.saveAndFlush(userEntity);
-        userDto.setId(userEntity.getId());
-        return userDto;
+        registerUserDto.setId(userEntity.getId());
+        return registerUserDto;
     }
 
     public ServiceProviderEntity createServiceProvider(ServiceProviderEntity serviceProviderEntity) {
@@ -49,15 +62,15 @@ public class UserService {
         return serviceProviderEntity;
     }
 
-    public List<UserDto> list() {
+    public List<RegisterUserDto> list() {
         return userRepository.findAll().stream() //
-                .map(entity -> mapper.map(entity, UserDto.class)) //
+                .map(entity -> mapper.map(entity, RegisterUserDto.class)) //
                 .collect(Collectors.toList());
     }
 
-    public UserDto findById(UUID id) {
+    public RegisterUserDto findById(UUID id) {
         return userRepository.findById(id) //
-                .map(entity -> mapper.map(entity, UserDto.class)) //
+                .map(entity -> mapper.map(entity, RegisterUserDto.class)) //
                 .orElseThrow(this::notFoundError);
     }
 
@@ -66,7 +79,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserDto updateUser(UUID id, UserDto user) {
+    public RegisterUserDto updateUser(UUID id, RegisterUserDto user) {
         if (!userRepository.existsById(id)) {
             throw notFoundError();
         } else {

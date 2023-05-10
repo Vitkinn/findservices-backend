@@ -43,7 +43,8 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests()
                 .requestMatchers(
-                        "/auth/signin"
+                        "/auth/signin",
+                        "/auth/register"
                 ).permitAll()
                 .requestMatchers("/api/**").authenticated()
                 .and().addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);

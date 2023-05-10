@@ -1,6 +1,7 @@
 package com.findservices.serviceprovider.user.model;
 
 import com.findservices.serviceprovider.address.model.AddressEntity;
+import com.findservices.serviceprovider.login.model.LoginEntity;
 import com.findservices.serviceprovider.serviceprovider.model.ServiceProviderEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -11,8 +12,6 @@ import org.springframework.data.domain.Persistable;
 
 import java.util.List;
 import java.util.UUID;
-
-import static com.findservices.serviceprovider.common.constants.TranslationConstants.FK_USER_ADDRESS_ID;
 
 @Data
 @NoArgsConstructor
@@ -45,6 +44,10 @@ public class UserEntity implements Persistable<UUID> {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id", updatable = false)
     ServiceProviderEntity serviceProvider;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private LoginEntity login;
 
     @Override
     public boolean isNew() {

@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @EqualsAndHashCode
-public class AccountCredentialsVO implements Serializable {
+public class AccountCredentialsDto implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -21,7 +21,7 @@ public class AccountCredentialsVO implements Serializable {
     @NotNull
     private String password;
 
-    public AccountCredentialsVO(String username, String password) {
+    public AccountCredentialsDto(String username, String password) {
         this.username = username;
         this.password = password;
     }
