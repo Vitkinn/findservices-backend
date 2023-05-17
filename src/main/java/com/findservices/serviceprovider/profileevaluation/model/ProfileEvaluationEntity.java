@@ -1,6 +1,5 @@
-package com.findservices.serviceprovider.address.model;
+package com.findservices.serviceprovider.profileevaluation.model;
 
-import com.findservices.serviceprovider.city.model.CityEntity;
 import com.findservices.serviceprovider.common.constants.TranslationConstants;
 import com.findservices.serviceprovider.user.model.UserEntity;
 import jakarta.persistence.*;
@@ -16,42 +15,37 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "address")
-public class AddressEntity implements Persistable<UUID> {
+@Table(name = "profile_evaluation")
+public class ProfileEvaluationEntity implements Persistable<UUID> {
 
     @Id
     @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
     @GeneratedValue(generator = "UUIDGenerator")
     @Column(name = "id", updatable = false, nullable = false)
     UUID id;
+    @Column(length = 500)
+    String comment;
 
-    @Column(nullable = false, length = 8)
-    String cep;
-    @Column(nullable = false)
-    String neighborhood;
-    @Column(nullable = false)
-    String street;
-    @Column(nullable = false)
-    Integer houseNumber;
-    @Column
-    String complement;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn( //
-            name = "city", //
-            nullable = false, //
-            foreignKey = @ForeignKey(name = TranslationConstants.FK_ADDRESS_CITY) //
-    )
-    CityEntity city;
+    @Column(nullable = false, name = "score")
+    Short score;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn( //
-            name = "user", //
+            name = "evaluator_user", //
             nullable = false, //
             updatable = false, //
-            foreignKey = @ForeignKey(name = TranslationConstants.FK_ADDRESS_USER) //
+            foreignKey = @ForeignKey(name = TranslationConstants.FK_PROFILE_EVALUATION_EVALUATOR_USER) //
     )
-    UserEntity user;
+    UserEntity evaluatorUser;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn( //
+            name = "rated_user", //
+            nullable = false, //
+            updatable = false, //
+            foreignKey = @ForeignKey(name = TranslationConstants.FK_PROFILE_EVALUATION_RATED_USER) //
+    )
+    UserEntity ratedUser;
 
     @Override
     public boolean isNew() {

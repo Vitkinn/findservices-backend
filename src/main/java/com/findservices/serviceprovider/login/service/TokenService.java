@@ -35,10 +35,10 @@ public class TokenService {
     }
 
     public String getSubject(String token) {
-        return JWT.require(Algorithm.HMAC256(secretKey)) //
-                .withIssuer("serviceProvider") //
-                .build() //
-                .verify(token) //
+        return JWT.require(Algorithm.HMAC256(secretKey))
+                .withIssuer("serviceProvider")
+                .build()
+                .verify(token)
                 .getSubject();
     }
 }

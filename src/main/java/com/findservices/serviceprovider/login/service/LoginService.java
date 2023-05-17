@@ -1,9 +1,12 @@
 package com.findservices.serviceprovider.login.service;
 
+import com.findservices.serviceprovider.login.model.LoginEntity;
+import com.findservices.serviceprovider.user.model.UserEntity;
 import lombok.AccessLevel;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

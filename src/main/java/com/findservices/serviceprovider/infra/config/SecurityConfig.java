@@ -18,7 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 @EnableMethodSecurity(jsr250Enabled = true, prePostEnabled = false)
 public class SecurityConfig {
 
@@ -46,8 +46,10 @@ public class SecurityConfig {
                         "/auth/signin",
                         "/auth/register"
                 ).permitAll()
-                .requestMatchers("/api/**").authenticated()
-                .and().addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+                .requestMatchers("/api/profileEvaluation").authenticated()
+                .requestMatchers("/api/**").permitAll()
+                .and() //
+                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

@@ -9,11 +9,13 @@ import com.findservices.serviceprovider.user.model.UserEntity;
 import lombok.AccessLevel;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.ObjectNotFoundException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -88,6 +90,11 @@ public class UserService {
             userRepository.saveAndFlush(entity);
             return user;
         }
+    }
+
+    public UserEntity getCurrentUser() {
+        LoginEntity login = (LoginEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return this.userRepository.findById(login.getId()).get();
     }
 
     private HandleException notFoundError() {

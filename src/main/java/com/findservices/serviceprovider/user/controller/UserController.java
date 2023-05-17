@@ -2,7 +2,6 @@ package com.findservices.serviceprovider.user.controller;
 
 import com.findservices.serviceprovider.user.model.RegisterUserDto;
 import com.findservices.serviceprovider.user.service.UserService;
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.Setter;
@@ -10,6 +9,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,7 +24,7 @@ public class UserController {
     UserService userService;
 
     @GetMapping
-    @RolesAllowed("ADMIN")
+    @Secured("ADMIN")
     public ResponseEntity<List<RegisterUserDto>> list() {
         return new ResponseEntity<>(userService.list(), HttpStatus.OK);
     }

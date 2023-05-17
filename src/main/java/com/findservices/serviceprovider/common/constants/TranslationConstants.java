@@ -20,6 +20,8 @@ public class TranslationConstants {
     public static final String VALIDATION_GENERIC_MIN_SIZE_FIELD = "validation_generic_min_size_field";
     public static final String FK_ADDRESS_CITY = "fk_address_city";
     public static final String FK_ADDRESS_USER = "fk_address_user";
+    public static final String FK_PROFILE_EVALUATION_RATED_USER = "fk_profile_evaluation_rated_user";
+    public static final String FK_PROFILE_EVALUATION_EVALUATOR_USER = "fk_profile_evaluation_evaluator_user";
     public static final String ERROR_COUNTRY_NOT_FOUND = "error_country_not_found";
     public static final String ERROR_STATE_NOT_FOUND = "error_state_not_found";
     public static final String ERROR_USER_NOT_FOUND = "error_state_not_found";
