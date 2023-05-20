@@ -5,6 +5,7 @@ import com.findservices.serviceprovider.common.validation.HandleException;
 import com.findservices.serviceprovider.login.model.LoginEntity;
 import com.findservices.serviceprovider.serviceprovider.model.ServiceProviderEntity;
 import com.findservices.serviceprovider.user.model.RegisterUserDto;
+import com.findservices.serviceprovider.user.model.UserDto;
 import com.findservices.serviceprovider.user.model.UserEntity;
 import lombok.AccessLevel;
 import lombok.Setter;
@@ -64,9 +65,9 @@ public class UserService {
         return serviceProviderEntity;
     }
 
-    public List<RegisterUserDto> list() {
+    public List<UserDto> list() {
         return userRepository.findAll().stream() //
-                .map(entity -> mapper.map(entity, RegisterUserDto.class)) //
+                .map(entity -> mapper.map(entity, UserDto.class)) //
                 .collect(Collectors.toList());
     }
 

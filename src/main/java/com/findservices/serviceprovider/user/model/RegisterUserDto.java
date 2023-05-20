@@ -31,11 +31,10 @@ public class RegisterUserDto extends BaseDto {
     String cpf;
 
     @NotNull
-    @Pattern(regexp = "(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}")
+    @Pattern(regexp = "(?=.*[a-z])(?=.*[A-Z]).{8,}")
     String password;
 
     @NotNull
-    @Email
     String login;
 
 }

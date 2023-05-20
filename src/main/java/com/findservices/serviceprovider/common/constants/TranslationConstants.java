@@ -29,4 +29,8 @@ public class TranslationConstants {
     public static final String ERROR_ADDRESS_NOT_FOUND = "error_address_not_found";
     public static final String VALIDATION_GENERIC_MIN_FIELD = "validation_generic_min_field";
     public static final String INVALID_OR_EXPIRED_TOKEN = "invalid_or_expired_token";
+    public static final String FK_SERVICE_REQUEST_USER_SERVICE_PROVIDER_ID = "fk_service_request_user_service_provider_id";
+    public static final String FK_SERVICE_REQUEST_USER_SERVICE_REQUESTER_ID = "fk_service_request_user_service_requester_id";
+    public static final String ERROR_SERVICE_PROVIDER_NOT_FOUND = "error_service_provider_not_found";
+    public static final String ERROR_SERVICE_REQUEST_NOT_FOUND = "error_service_request_not_found";
 }

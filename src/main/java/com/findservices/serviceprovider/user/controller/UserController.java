@@ -1,6 +1,7 @@
 package com.findservices.serviceprovider.user.controller;
 
 import com.findservices.serviceprovider.user.model.RegisterUserDto;
+import com.findservices.serviceprovider.user.model.UserDto;
 import com.findservices.serviceprovider.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
@@ -25,7 +26,7 @@ public class UserController {
 
     @GetMapping
     @Secured("ADMIN")
-    public ResponseEntity<List<RegisterUserDto>> list() {
+    public ResponseEntity<List<UserDto>> list() {
         return new ResponseEntity<>(userService.list(), HttpStatus.OK);
     }
 
