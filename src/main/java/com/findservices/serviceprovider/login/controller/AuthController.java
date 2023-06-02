@@ -4,7 +4,7 @@ import com.findservices.serviceprovider.login.model.AccountCredentialsDto;
 import com.findservices.serviceprovider.login.model.LoginEntity;
 import com.findservices.serviceprovider.login.model.TokenDto;
 import com.findservices.serviceprovider.login.service.TokenService;
-import com.findservices.serviceprovider.user.model.RegisterUserDto;
+import com.findservices.serviceprovider.user.model.RegisterUserDtoInput;
 import com.findservices.serviceprovider.user.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +45,7 @@ public class AuthController {
     }
 
     @PostMapping(value = "/register")
-    public ResponseEntity<RegisterUserDto> register(@RequestBody @Valid RegisterUserDto user) {
+    public ResponseEntity<RegisterUserDtoInput> register(@RequestBody @Valid RegisterUserDtoInput user) {
         return new ResponseEntity<>(userService.createUser(user), HttpStatus.CREATED);
     }
 

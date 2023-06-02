@@ -1,6 +1,7 @@
 package com.findservices.serviceprovider.user.controller;
 
-import com.findservices.serviceprovider.user.model.RegisterUserDto;
+import com.findservices.serviceprovider.user.model.RegisterUserDtoInput;
+import com.findservices.serviceprovider.user.model.RegisterUserDtoOutput;
 import com.findservices.serviceprovider.user.model.UserDto;
 import com.findservices.serviceprovider.user.service.UserService;
 import jakarta.validation.Valid;
@@ -31,12 +32,12 @@ public class UserController {
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<RegisterUserDto> findById(@PathVariable UUID id) {
+    public ResponseEntity<UserDto> findById(@PathVariable UUID id) {
         return new ResponseEntity<>(userService.findById(id), HttpStatus.OK);
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity<RegisterUserDto> update(@PathVariable UUID id, @Valid @RequestBody RegisterUserDto country) {
+    public ResponseEntity<RegisterUserDtoOutput> update(@PathVariable UUID id, @Valid @RequestBody RegisterUserDtoInput country) {
         return new ResponseEntity<>(userService.updateUser(id, country), HttpStatus.OK);
     }
 }

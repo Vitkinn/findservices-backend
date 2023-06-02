@@ -10,7 +10,7 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class RegisterUserDto extends BaseDto {
+public class RegisterUserDtoInput extends BaseDto {
 
     @NotEmpty
     @NotNull
