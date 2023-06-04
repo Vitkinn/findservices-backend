@@ -1,5 +1,6 @@
 package com.findservices.serviceprovider.infra.config;
 
+import com.findservices.serviceprovider.login.model.RoleType;
 import com.findservices.serviceprovider.login.service.FilterToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -43,16 +44,17 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests()
                 .requestMatchers(
-                        "/auth/signin"
-                ).permitAll()
-                .requestMatchers(
+                        "/auth/signin",
                         "/auth/register"
                 ).anonymous()
+                .requestMatchers("/api/**")
+                .fullyAuthenticated()
                 .requestMatchers(
-                        "/api/profileEvaluation",
-                        "/api/serviceRequest/**"
-                ).authenticated()
-                .requestMatchers("/api/**").permitAll()
+                        "/api/city",
+                        "/api/country",
+                        "/api/city",
+                        "/api/country"
+                ).hasRole(RoleType.CLIENT.name())
                 .and() //
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
