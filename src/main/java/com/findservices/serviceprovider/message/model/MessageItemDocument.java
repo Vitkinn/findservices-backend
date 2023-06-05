@@ -5,16 +5,21 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-//@Document("messageitem")
+@Document("messageitem")
 @Getter
 @Setter
 @EqualsAndHashCode
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class MessageItemDocument {
+
+    @Id
+    UUID id;
 
     String message;
 

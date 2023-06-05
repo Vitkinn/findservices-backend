@@ -8,30 +8,31 @@ import com.findservices.serviceprovider.user.model.UserDto;
 import com.findservices.serviceprovider.user.model.UserEntity;
 import com.findservices.serviceprovider.user.service.UserService;
 import lombok.AccessLevel;
-import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-@Setter(onMethod_ = @Autowired)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class MessageService {
 
+    @Qualifier("ChatRepository")
+    @Autowired(required = false)
     ServiceRequestChatRepository serviceRequestChatRepository;
+    @Autowired
     UserService userService;
+    @Autowired
     ModelMapper mapper;
 
     public void sendMessage(SendMessageInput sendMessageInput) {
         MessageItemDocument messageItemDocument = new MessageItemDocument();
+        messageItemDocument.setId(UUID.randomUUID());
         messageItemDocument.setMessage(sendMessageInput.getMessage());
         messageItemDocument.setUserId(userService.getCurrentUser().getId());
         messageItemDocument.setMessageDateTime(LocalDateTime.now());
