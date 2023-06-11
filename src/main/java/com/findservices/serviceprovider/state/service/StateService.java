@@ -5,7 +5,6 @@ import com.findservices.serviceprovider.common.validation.HandleException;
 import com.findservices.serviceprovider.state.model.StateDto;
 import com.findservices.serviceprovider.state.model.StateEntity;
 import lombok.AccessLevel;
-import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +19,14 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-@Setter(onMethod_ = @Autowired)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class StateService {
 
+    @Autowired
     StateRepository stateRepository;
-
+    @Autowired
     ModelMapper mapper;
-
+    @Autowired
     MessageSource messageSource;
 
     @Transactional

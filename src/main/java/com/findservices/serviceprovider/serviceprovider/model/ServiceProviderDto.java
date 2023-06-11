@@ -26,7 +26,4 @@ public class ServiceProviderDto extends BaseDto {
     @NotEmpty
     @NotNull
     List<IdDto> actuationCities;
-
-    @NotNull
-    IdDto user;
 }

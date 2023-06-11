@@ -7,7 +7,6 @@ import com.findservices.serviceprovider.serviceprovider.model.ServiceProviderEnt
 import com.findservices.serviceprovider.user.model.UserEntity;
 import com.findservices.serviceprovider.user.service.UserService;
 import lombok.AccessLevel;
-import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.exception.ConstraintViolationException;
 import org.modelmapper.ModelMapper;
@@ -23,27 +22,27 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-@Setter(onMethod_ = @Autowired)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ServiceProviderService {
 
+    @Autowired
     ServiceProviderRepository serviceProviderRepository;
-
+    @Autowired
     ModelMapper mapper;
-
+    @Autowired
     MessageSource messageSource;
-
+    @Autowired
     UserService userService;
 
     @Transactional
     public ServiceProviderDto createServiceProvider(ServiceProviderDto serviceProviderDto) {
         ServiceProviderEntity serviceProviderEntity = mapper.map(serviceProviderDto, ServiceProviderEntity.class);
-        UserEntity user = userService.findEntityById(serviceProviderDto.getUser().getId()) //
-                .orElseThrow(() -> new ConstraintViolationException(null, null, TranslationConstants.FK_SERVICE_PROVIDER_USER_ID));
-
-        serviceProviderEntity.setId(user.getId());
+        UserEntity currentUser = userService.getCurrentUser();
+        serviceProviderEntity.setId(currentUser.getId());
         serviceProviderEntity = serviceProviderRepository.saveAndFlush(serviceProviderEntity);
         serviceProviderDto.setId(serviceProviderEntity.getId());
+
+        userService.toServiceProvider(currentUser);
         return serviceProviderDto;
     }
 

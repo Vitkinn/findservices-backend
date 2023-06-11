@@ -20,12 +20,14 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-@Setter(onMethod_ = @Autowired)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CountryService {
 
+    @Autowired
     CountryRepository countryRepository;
+    @Autowired
     ModelMapper modelMapper;
+    @Autowired
     MessageSource messageSource;
 
     public CountryDto createCountry(CountryDto countryDto) {

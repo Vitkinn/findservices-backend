@@ -47,14 +47,17 @@ public class SecurityConfig {
                         "/auth/signin",
                         "/auth/register"
                 ).anonymous()
-                .requestMatchers("/api/**")
-                .fullyAuthenticated()
                 .requestMatchers(
-                        "/api/city",
-                        "/api/country",
-                        "/api/city",
-                        "/api/country"
-                ).hasRole(RoleType.CLIENT.name())
+                        "/api/message/**",
+                        "/api/serviceRequest/**",
+                        "/api/serviceProvider/**",
+                        "/api/country/**",
+                        "/api/state/**",
+                        "/api/city/**",
+                        "/api/city/**",
+                        "/api/user/**",
+                        "/api/address/**"
+                ).authenticated()
                 .and() //
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

@@ -4,7 +4,6 @@ import com.findservices.serviceprovider.state.model.StateDto;
 import com.findservices.serviceprovider.state.service.StateService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
-import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,12 +13,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
-@Setter(onMethod_ = @Autowired)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @RestController
 @RequestMapping(value = "/api/state")
 public class StateController {
 
+    @Autowired
     StateService stateService;
 
     @PostMapping

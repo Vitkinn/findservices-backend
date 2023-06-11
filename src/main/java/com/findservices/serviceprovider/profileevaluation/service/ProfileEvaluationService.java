@@ -27,12 +27,14 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-@Setter(onMethod_ = @Autowired)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ProfileEvaluationService {
 
+    @Autowired
     ModelMapper modelMapper;
+    @Autowired
     ProfileEvaluationRepository repository;
+    @Autowired
     UserService userService;
 
     @Transactional

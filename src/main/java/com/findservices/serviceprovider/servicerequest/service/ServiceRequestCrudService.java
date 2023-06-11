@@ -7,7 +7,9 @@ import com.findservices.serviceprovider.servicerequest.model.*;
 import com.findservices.serviceprovider.servicerequest.model.RequestStatusType;
 import com.findservices.serviceprovider.user.model.UserEntity;
 import com.findservices.serviceprovider.user.service.UserService;
+import lombok.AccessLevel;
 import lombok.Setter;
+import lombok.experimental.FieldDefaults;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,12 +22,16 @@ import java.util.function.Supplier;
 import static com.findservices.serviceprovider.common.constants.TranslationConstants.ERROR_SERVICE_PROVIDER_NOT_FOUND;
 
 @Service
-@Setter(onMethod_ = @Autowired)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class ServiceRequestCrudService {
 
+    @Autowired
     UserService userService;
+    @Autowired
     TranslationService translationService;
+    @Autowired
     ServiceRequestRepository serviceRequestRepository;
+    @Autowired
     ModelMapper mapper;
 
     @Transactional

@@ -22,7 +22,7 @@ public class MessageController {
     }
 
     @GetMapping("/{serviceRequestId}")
-    public ListMessagesOutput listByServiceRequest(@RequestParam("serviceRequestId") UUID serviceRequestId) {
+    public ListMessagesOutput listByServiceRequest(@PathVariable("serviceRequestId") UUID serviceRequestId) {
         return messageService.listByServiceRequest(serviceRequestId);
     }
 }

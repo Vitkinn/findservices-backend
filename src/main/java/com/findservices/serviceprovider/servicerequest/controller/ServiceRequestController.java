@@ -2,24 +2,22 @@ package com.findservices.serviceprovider.servicerequest.controller;
 
 import com.findservices.serviceprovider.servicerequest.model.ClientServiceRequestDto;
 import com.findservices.serviceprovider.servicerequest.model.EvaluateRequestDto;
-import com.findservices.serviceprovider.servicerequest.model.RequestStatusType;
 import com.findservices.serviceprovider.servicerequest.model.ServiceRequestDto;
 import com.findservices.serviceprovider.servicerequest.service.ServiceRequestCrudService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
-import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-@Setter(onMethod_ = @Autowired)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @RestController
 @RequestMapping(value = "/api/serviceRequest")
 public class ServiceRequestController {
 
+    @Autowired
     ServiceRequestCrudService serviceRequestCrudService;
 
     @PostMapping("/create")

@@ -4,7 +4,6 @@ import com.findservices.serviceprovider.country.model.CountryDto;
 import com.findservices.serviceprovider.country.service.CountryService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
-import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,12 +13,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
-@Setter(onMethod_ = @Autowired)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @RestController
 @RequestMapping("/api/country")
 public class CountryController {
 
+    @Autowired
     CountryService countryService;
 
     @PostMapping

@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
-@Setter(onMethod_ = @Autowired)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @RestController
 @RequestMapping(value = "/api/city")
 public class CityController {
 
+    @Autowired
     CityService cityService;
 
     @PostMapping

@@ -30,6 +30,7 @@ public class TokenService {
         return TokenDto.builder()
                 .accessToken(token)
                 .expiration(expiresAt)
+                .role(login.getRole())
                 .username(login.getUsername())
                 .build();
     }

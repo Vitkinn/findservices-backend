@@ -3,13 +3,13 @@ package com.findservices.serviceprovider.user.service;
 import com.findservices.serviceprovider.common.constants.TranslationConstants;
 import com.findservices.serviceprovider.common.validation.HandleException;
 import com.findservices.serviceprovider.login.model.LoginEntity;
+import com.findservices.serviceprovider.login.model.RoleType;
 import com.findservices.serviceprovider.serviceprovider.model.ServiceProviderEntity;
 import com.findservices.serviceprovider.user.model.RegisterUserDtoInput;
 import com.findservices.serviceprovider.user.model.RegisterUserDtoOutput;
 import com.findservices.serviceprovider.user.model.UserDto;
 import com.findservices.serviceprovider.user.model.UserEntity;
 import lombok.AccessLevel;
-import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.exception.ConstraintViolationException;
 import org.modelmapper.ModelMapper;
@@ -21,20 +21,25 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
-@Setter(onMethod_ = @Autowired)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserService {
 
+    @Autowired
     UserRepository userRepository;
 
+    @Autowired
     ModelMapper mapper;
 
+    @Autowired
     MessageSource messageSource;
 
+    @Autowired
     PasswordEncoder passwordEncoder;
 
     @Transactional
@@ -65,12 +70,6 @@ public class UserService {
         return serviceProviderEntity;
     }
 
-    public List<UserDto> list() {
-        return userRepository.findAll().stream() //
-                .map(entity -> mapper.map(entity, UserDto.class)) //
-                .collect(Collectors.toList());
-    }
-
     public UserDto findById(UUID id) {
         return userRepository.findById(id) //
                 .map(entity -> mapper.map(entity, UserDto.class)) //
@@ -82,20 +81,30 @@ public class UserService {
     }
 
     @Transactional
-    public RegisterUserDtoOutput updateUser(UUID id, RegisterUserDtoInput user) {
-        if (!userRepository.existsById(id)) {
-            throw notFoundError();
-        } else {
-            user.setId(id);
-            UserEntity entity = mapper.map(user, UserEntity.class);
-            userRepository.saveAndFlush(entity);
-            return mapper.map(user, RegisterUserDtoOutput.class);
-        }
+    public RegisterUserDtoOutput updateUser(RegisterUserDtoInput user) {
+        UserEntity currentUser = this.getCurrentUser();
+        currentUser.setLastName(user.getLastName());
+        currentUser.setName(user.getName());
+        currentUser.setUserPhotoUrl(user.getUserPhotoUrl());
+        currentUser.setCpf(user.getCpf());
+        currentUser.setCpf(user.getLogin());
+        userRepository.save(currentUser);
+        return mapper.map(user, RegisterUserDtoOutput.class);
     }
 
     public UserEntity getCurrentUser() {
         LoginEntity login = (LoginEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return this.userRepository.findById(login.getId()).get();
+    }
+
+    public UserDto getCurrentUserDto() {
+        final UserEntity currentUser = this.getCurrentUser();
+        final UserDto userDto = new UserDto();
+        userDto.setUserPhotoUrl(currentUser.getUserPhotoUrl());
+        userDto.setName(currentUser.getName());
+        userDto.setLastName(currentUser.getLastName());
+        userDto.setId(currentUser.getId());
+        return userDto;
     }
 
     private HandleException notFoundError() {
@@ -107,5 +116,10 @@ public class UserService {
                 ), //
                 HttpStatus.NOT_FOUND //
         );
+    }
+
+    public void toServiceProvider(UserEntity currentUser) {
+        currentUser.getLogin().setRole(RoleType.SERVICE_PROVIDER);
+        this.userRepository.save(currentUser);
     }
 }

@@ -19,12 +19,14 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-@Setter(onMethod_ = @Autowired)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CityService {
 
+    @Autowired
     CityRepository cityRepository;
+    @Autowired
     ModelMapper modelMapper;
+    @Autowired
     MessageSource messageSource;
 
     public CityDto createCity(CityDto cityDto) {

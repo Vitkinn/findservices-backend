@@ -20,4 +20,5 @@ public class TokenDto implements Serializable {
     private String username;
     private Instant expiration;
     private String accessToken;
+    private RoleType role;
 }

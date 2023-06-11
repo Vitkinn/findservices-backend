@@ -2,8 +2,10 @@ package com.findservices.serviceprovider.common.validation;
 
 import com.findservices.serviceprovider.common.constants.TranslationConstants;
 import com.findservices.serviceprovider.login.exceptions.InvalidJwtAuthenticationException;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AccessLevel;
-import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,21 +16,27 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.*;
+import java.io.IOException;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-@Setter(onMethod_ = @Autowired)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @ControllerAdvice
-public class HandleValidationError extends ResponseEntityExceptionHandler {
+public class HandleValidationError extends ResponseEntityExceptionHandler implements AuthenticationEntryPoint {
 
+    @Autowired
     MessageSource messageSource;
 
     @Override
@@ -45,6 +53,16 @@ public class HandleValidationError extends ResponseEntityExceptionHandler {
                 .build();
 
         return new ResponseEntity<>(apiError, headers, status);
+    }
+
+    @ExceptionHandler({AuthenticationException.class})
+    public ResponseEntity<ApiError> handleAuthenticationException(Exception ex) {
+
+        final ApiError error = ApiError.builder() //
+                .status(HttpStatus.UNAUTHORIZED) //
+                .message("Authentication failed at controller advice") //
+                .build();
+        return ResponseEntity.status(error.getStatus()).body(error);
     }
 
     @ExceptionHandler({ConstraintViolationException.class, DataIntegrityViolationException.class})
@@ -131,5 +149,10 @@ public class HandleValidationError extends ResponseEntityExceptionHandler {
             );
             default -> error.getDefaultMessage();
         };
+    }
+
+    @Override
+    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authenticationException) throws IOException, ServletException {
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authenticationException.getMessage());
     }
 }

@@ -19,27 +19,21 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
-@Setter(onMethod_ = @Autowired)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @RestController
 @RequestMapping(value = "/api/user")
 public class UserController {
 
+    @Autowired
     UserService userService;
 
-    @GetMapping
-    @Secured("ADMIN")
-    public ResponseEntity<List<UserDto>> list() {
-        return new ResponseEntity<>(userService.list(), HttpStatus.OK);
-    }
-
-    @GetMapping(path = "/{id}")
-    public ResponseEntity<UserDto> findById(@PathVariable UUID id) {
-        return new ResponseEntity<>(userService.findById(id), HttpStatus.OK);
+    @GetMapping(path = "")
+    public ResponseEntity<UserDto> currentUser() {
+        return new ResponseEntity<>(userService.getCurrentUserDto(), HttpStatus.OK);
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity<RegisterUserDtoOutput> update(@PathVariable UUID id, @Valid @RequestBody RegisterUserDtoInput country) {
-        return new ResponseEntity<>(userService.updateUser(id, country), HttpStatus.OK);
+    public ResponseEntity<RegisterUserDtoOutput> update(@Valid @RequestBody RegisterUserDtoInput country) {
+        return new ResponseEntity<>(userService.updateUser(country), HttpStatus.OK);
     }
 }
