@@ -1,6 +1,7 @@
 package com.findservices.serviceprovider.user.service;
 
 import com.findservices.serviceprovider.common.constants.TranslationConstants;
+import com.findservices.serviceprovider.common.validation.ApiError;
 import com.findservices.serviceprovider.common.validation.HandleException;
 import com.findservices.serviceprovider.login.model.LoginEntity;
 import com.findservices.serviceprovider.login.model.RoleType;
@@ -97,14 +98,16 @@ public class UserService {
         return this.userRepository.findById(login.getId()).get();
     }
 
-    public UserDto getCurrentUserDto() {
-        final UserEntity currentUser = this.getCurrentUser();
-        final UserDto userDto = new UserDto();
-        userDto.setUserPhotoUrl(currentUser.getUserPhotoUrl());
-        userDto.setName(currentUser.getName());
-        userDto.setLastName(currentUser.getLastName());
-        userDto.setId(currentUser.getId());
-        return userDto;
+    public UserDto getUserById(UUID id) {
+        return userRepository.findById(id)
+                .map(userEntity -> {
+                    final UserDto userDto = new UserDto();
+                    userDto.setUserPhotoUrl(userEntity.getUserPhotoUrl());
+                    userDto.setName(userEntity.getName());
+                    userDto.setLastName(userEntity.getLastName());
+                    userDto.setId(userEntity.getId());
+                    return userDto;
+                }).orElse(null);
     }
 
     private HandleException notFoundError() {
