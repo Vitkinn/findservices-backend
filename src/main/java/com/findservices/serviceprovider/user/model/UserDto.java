@@ -21,6 +21,6 @@ public class UserDto {
     @NotNull
     String lastName;
 
-    String UserPhotoUrl;
+    String photoUrl;
 
 }

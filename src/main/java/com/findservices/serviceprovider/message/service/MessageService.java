@@ -53,7 +53,7 @@ public class MessageService {
                     userDTO.setId(message.getUserId());
                     userDTO.setName(message.getUserName());
                     userDTO.setLastName(message.getUserLastName());
-                    userDTO.setUserPhotoUrl(message.getUserPhoto());
+                    userDTO.setPhotoUrl(message.getUserPhoto());
                     messageItemDto.setUser(userDTO);
                     messageItemDto.setMessage(message.getMessage());
                     messageItemDto.setMessageDateTime(message.getMessageDateTime());

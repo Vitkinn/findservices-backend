@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -15,6 +16,9 @@ public class AccountCredentialsDto implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
+
+    @NotNull
+    private UUID id;
 
     @NotNull
     private String username;

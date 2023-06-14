@@ -1,7 +1,6 @@
 package com.findservices.serviceprovider.user.service;
 
 import com.findservices.serviceprovider.common.constants.TranslationConstants;
-import com.findservices.serviceprovider.common.validation.ApiError;
 import com.findservices.serviceprovider.common.validation.HandleException;
 import com.findservices.serviceprovider.login.model.LoginEntity;
 import com.findservices.serviceprovider.login.model.RoleType;
@@ -102,7 +101,7 @@ public class UserService {
         return userRepository.findById(id)
                 .map(userEntity -> {
                     final UserDto userDto = new UserDto();
-                    userDto.setUserPhotoUrl(userEntity.getUserPhotoUrl());
+                    userDto.setPhotoUrl(userEntity.getUserPhotoUrl());
                     userDto.setName(userEntity.getName());
                     userDto.setLastName(userEntity.getLastName());
                     userDto.setId(userEntity.getId());

@@ -23,8 +23,8 @@ public class UserController {
     UserService userService;
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<UserDto> currentUser(@RequestParam(value = "id") UUID userId) {
-        return new ResponseEntity<>(userService.getUserById(userId), HttpStatus.OK);
+    public ResponseEntity<UserDto> currentUser(@PathVariable(value = "id") UUID id) {
+        return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
     }
 
     @PutMapping(path = "/{id}")
