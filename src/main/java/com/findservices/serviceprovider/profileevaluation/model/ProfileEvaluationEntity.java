@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.domain.Persistable;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Data
@@ -26,8 +27,11 @@ public class ProfileEvaluationEntity implements Persistable<UUID> {
     @Column(length = 500)
     String comment;
 
-    @Column(nullable = false, name = "score")
-    Short score;
+    @Column(nullable = false, name = "rate")
+    Short rate;
+
+    @Column(nullable = false, name = "evaluation_date")
+    LocalDate evaluationDate;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn( //

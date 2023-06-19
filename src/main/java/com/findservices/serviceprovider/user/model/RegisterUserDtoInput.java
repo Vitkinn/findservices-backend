@@ -37,4 +37,7 @@ public class RegisterUserDtoInput extends BaseDto {
     @NotNull
     String login;
 
+    @NotNull
+    String phone;
+
 }

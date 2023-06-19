@@ -43,8 +43,4 @@ public class AddressDto extends BaseDto {
     @NotNull
     IdDto city;
 
-    @Valid
-    @NotNull
-    IdDto user;
-
 }

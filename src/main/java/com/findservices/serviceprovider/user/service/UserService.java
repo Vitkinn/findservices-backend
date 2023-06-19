@@ -21,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Optional;
@@ -46,6 +47,7 @@ public class UserService {
     public RegisterUserDtoInput createUser(RegisterUserDtoInput registerUserDtoInput) {
         UserEntity userEntity = mapper.map(registerUserDtoInput, UserEntity.class);
         userEntity.setAddress(new ArrayList<>());
+        userEntity.setCreateAccountDate(LocalDate.now());
 
         String encryptedPassword = passwordEncoder.encode(registerUserDtoInput.getPassword());
 
@@ -104,6 +106,7 @@ public class UserService {
                     userDto.setPhotoUrl(userEntity.getUserPhotoUrl());
                     userDto.setName(userEntity.getName());
                     userDto.setLastName(userEntity.getLastName());
+                    userDto.setCreateAccountDate(userEntity.getCreateAccountDate());
                     userDto.setId(userEntity.getId());
                     return userDto;
                 }).orElse(null);

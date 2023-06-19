@@ -10,6 +10,6 @@ import java.util.UUID;
 @Repository
 public interface ProfileEvaluationRepository extends JpaRepository<ProfileEvaluationEntity, UUID> {
 
-    List<ProfileEvaluationEntity> findAllByRatedUserId(UUID ratedUserId);
+    List<ProfileEvaluationEntity> findAllByRatedUserIdOrderByEvaluationDateDesc(UUID ratedUserId);
 
 }

@@ -44,9 +44,9 @@ public class AddressEntity implements Persistable<UUID> {
     )
     CityEntity city;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn( //
-            name = "user", //
+            name = "user_id", //
             nullable = false, //
             updatable = false, //
             foreignKey = @ForeignKey(name = TranslationConstants.FK_ADDRESS_USER) //

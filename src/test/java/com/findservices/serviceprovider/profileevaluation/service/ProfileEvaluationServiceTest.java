@@ -1,7 +1,7 @@
 package com.findservices.serviceprovider.profileevaluation.service;
 
 import com.findservices.serviceprovider.common.model.BaseDto;
-import com.findservices.serviceprovider.profileevaluation.model.ProfileEvaluationDto;
+import com.findservices.serviceprovider.profileevaluation.model.ProfileEvaluationRateDto;
 import com.findservices.serviceprovider.profileevaluation.model.ProfileEvaluationEntity;
 import com.findservices.serviceprovider.user.model.UserEntity;
 import com.findservices.serviceprovider.user.service.UserService;
@@ -35,7 +35,7 @@ class ProfileEvaluationServiceTest {
     @Test
     void testEvaluateUser() {
         // Given
-        ProfileEvaluationDto profileEvaluationDto = new ProfileEvaluationDto();
+        ProfileEvaluationRateDto profileEvaluationDto = new ProfileEvaluationRateDto();
         String testComment = "Test comment";
         profileEvaluationDto.setComment(testComment);
         profileEvaluationDto.setScore(5L);
@@ -54,7 +54,7 @@ class ProfileEvaluationServiceTest {
         ProfileEvaluationEntity entityToCreate = new ProfileEvaluationEntity();
         entityToCreate.setEvaluatorUser(currentUser);
         entityToCreate.setRatedUser(ratedUserEntity);
-        entityToCreate.setScore((short) 5);
+        entityToCreate.setRate((short) 5);
         entityToCreate.setComment(testComment);
 
         when(userService.getCurrentUser()).thenReturn(currentUser);
@@ -62,7 +62,7 @@ class ProfileEvaluationServiceTest {
         when(repository.save(refEq(entityToCreate))).thenReturn(savedEntity);
 
         // When
-        ProfileEvaluationDto result = profileEvaluationService.evaluateUser(profileEvaluationDto);
+        ProfileEvaluationRateDto result = profileEvaluationService.evaluateUser(profileEvaluationDto);
 
         // Then
         Assertions.assertEquals(id, result.getId());

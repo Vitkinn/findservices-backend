@@ -1,30 +1,21 @@
 package com.findservices.serviceprovider.profileevaluation.service;
 
-import com.findservices.serviceprovider.address.model.AddressDto;
-import com.findservices.serviceprovider.address.model.AddressEntity;
-import com.findservices.serviceprovider.common.constants.TranslationConstants;
-import com.findservices.serviceprovider.common.validation.HandleException;
-import com.findservices.serviceprovider.login.model.LoginEntity;
-import com.findservices.serviceprovider.profileevaluation.model.ProfileEvaluationDto;
+import com.findservices.serviceprovider.profileevaluation.model.ProfileEvaluationRateDto;
 import com.findservices.serviceprovider.profileevaluation.model.ProfileEvaluationEntity;
-import com.findservices.serviceprovider.user.model.UserEntity;
+import com.findservices.serviceprovider.profileevaluation.model.ProfileEvaluationViewDto;
 import com.findservices.serviceprovider.user.service.UserService;
 import lombok.AccessLevel;
-import lombok.Setter;
 import lombok.experimental.FieldDefaults;
-import org.hibernate.exception.ConstraintViolationException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -38,11 +29,12 @@ public class ProfileEvaluationService {
     UserService userService;
 
     @Transactional
-    public ProfileEvaluationDto evaluateUser(ProfileEvaluationDto profileEvaluationDto) {
+    public ProfileEvaluationRateDto evaluateUser(ProfileEvaluationRateDto profileEvaluationDto) {
         ProfileEvaluationEntity profileEvaluationEntity = new ProfileEvaluationEntity();
 
         profileEvaluationEntity.setComment(profileEvaluationDto.getComment());
-        profileEvaluationEntity.setScore(profileEvaluationDto.getScore().shortValue());
+        profileEvaluationEntity.setRate(profileEvaluationDto.getScore());
+        profileEvaluationEntity.setEvaluationDate(LocalDate.now());
 
         profileEvaluationEntity.setRatedUser(userService.findEntityById(profileEvaluationDto.getRatedUser().getId()) //
                 .orElse(null));
@@ -54,9 +46,20 @@ public class ProfileEvaluationService {
         return profileEvaluationDto;
     }
 
-    public List<ProfileEvaluationDto> listByUser(UUID userId) {
-        return repository.findAllByRatedUserId(userId).stream() //
-                .map(entity -> modelMapper.map(entity, ProfileEvaluationDto.class)) //
+    public int calculateScore(List<ProfileEvaluationViewDto> profileEvaluations) {
+        final int score;
+        if (profileEvaluations.isEmpty()) {
+            score = 0;
+        } else {
+            int sumAllScores = profileEvaluations.stream().flatMapToInt(evaluation -> IntStream.of(evaluation.getRate().intValue())).sum();
+            score = sumAllScores / profileEvaluations.size();
+        }
+        return score;
+    }
+
+    public List<ProfileEvaluationViewDto> listByUser(UUID userId) {
+        return repository.findAllByRatedUserIdOrderByEvaluationDateDesc(userId).stream() //
+                .map(entity -> modelMapper.map(entity, ProfileEvaluationViewDto.class)) //
                 .collect(Collectors.toList());
     }
 

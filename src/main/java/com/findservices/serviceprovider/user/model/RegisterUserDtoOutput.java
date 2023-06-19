@@ -23,4 +23,6 @@ public class RegisterUserDtoOutput {
     String cpf;
 
     String login;
+
+    String phone;
 }

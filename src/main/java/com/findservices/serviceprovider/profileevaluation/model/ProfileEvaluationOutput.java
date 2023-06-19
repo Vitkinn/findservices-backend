@@ -3,14 +3,17 @@ package com.findservices.serviceprovider.profileevaluation.model;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Builder
 @Getter
 public class ProfileEvaluationOutput {
 
-    Double score;
+    Integer rate;
 
-    List<ProfileEvaluationDto> evaluations;
+    Integer quantity;
+
+    List<ProfileEvaluationViewDto> evaluations;
 
 }

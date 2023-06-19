@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.domain.Persistable;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,13 +33,20 @@ public class UserEntity implements Persistable<UUID> {
     @Column(nullable = false, name = "last_name", length = 11)
     String lastName;
 
-    @Column(name = "user_photo_url", length = 300)
+    @Column(name = "user_photo_url", length = 4000)
     String userPhotoUrl;
 
     @Column(name = "cpf", length = 11)
     String cpf;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
+    @Column(name = "create_account_date", nullable = false)
+    LocalDate createAccountDate;
+
+    @Column(name = "phone", nullable = false)
+    String phone;
+
+    @OneToMany
+    @JoinColumn(name = "user_id")
     List<AddressEntity> address;
 
     @OneToOne(cascade = CascadeType.ALL)
