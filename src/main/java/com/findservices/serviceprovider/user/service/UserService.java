@@ -6,7 +6,7 @@ import com.findservices.serviceprovider.login.model.LoginEntity;
 import com.findservices.serviceprovider.login.model.RoleType;
 import com.findservices.serviceprovider.serviceprovider.model.ServiceProviderEntity;
 import com.findservices.serviceprovider.user.model.RegisterUserDtoInput;
-import com.findservices.serviceprovider.user.model.RegisterUserDtoOutput;
+import com.findservices.serviceprovider.user.model.UpdateUserDto;
 import com.findservices.serviceprovider.user.model.UserDto;
 import com.findservices.serviceprovider.user.model.UserEntity;
 import lombok.AccessLevel;
@@ -83,7 +83,7 @@ public class UserService {
     }
 
     @Transactional
-    public RegisterUserDtoOutput updateUser(RegisterUserDtoInput user) {
+    public UpdateUserDto updateUser(UpdateUserDto user) {
         UserEntity currentUser = this.getCurrentUser();
         currentUser.setLastName(user.getLastName());
         currentUser.setName(user.getName());
@@ -91,7 +91,7 @@ public class UserService {
         currentUser.setCpf(user.getCpf());
         currentUser.setCpf(user.getLogin());
         userRepository.save(currentUser);
-        return mapper.map(user, RegisterUserDtoOutput.class);
+        return mapper.map(user, UpdateUserDto.class);
     }
 
     public UserEntity getCurrentUser() {
@@ -126,5 +126,18 @@ public class UserService {
     public void toServiceProvider(UserEntity currentUser) {
         currentUser.getLogin().setRole(RoleType.SERVICE_PROVIDER);
         this.userRepository.save(currentUser);
+    }
+
+    public UpdateUserDto getCurrentUserModel() {
+        final UserEntity userEntity = this.getCurrentUser();
+        final UpdateUserDto editUserDto = new UpdateUserDto();
+        editUserDto.setPhone(userEntity.getPhone());
+        editUserDto.setName(userEntity.getName());
+        editUserDto.setLastName(userEntity.getLastName());
+        editUserDto.setLogin(userEntity.getLogin().getUsername());
+        editUserDto.setUserPhotoUrl(userEntity.getUserPhotoUrl());
+        editUserDto.setId(userEntity.getId());
+        editUserDto.setCpf(userEntity.getCpf());
+        return editUserDto;
     }
 }
