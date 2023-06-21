@@ -89,7 +89,7 @@ public class UserService {
         currentUser.setName(user.getName());
         currentUser.setUserPhotoUrl(user.getUserPhotoUrl());
         currentUser.setCpf(user.getCpf());
-        currentUser.setCpf(user.getLogin());
+        currentUser.getLogin().setUsername(user.getLogin());
         userRepository.save(currentUser);
         return mapper.map(user, UpdateUserDto.class);
     }

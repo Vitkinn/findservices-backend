@@ -17,6 +17,7 @@ public class ServiceRequestDto {
     String serviceDescription;
     Double value;
     Double clientWishValue;
+    String title;
     String valueJustification;
     RequestStatusType requestStatus;
     UserDto serviceProvider;

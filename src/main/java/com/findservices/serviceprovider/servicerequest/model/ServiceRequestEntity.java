@@ -37,6 +37,9 @@ public class ServiceRequestEntity implements Persistable<UUID> {
     @Column(name = "value_justification", length = 2000)
     String valueJustification;
 
+    @Column(name = "title", length = 150)
+    String title;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "request_status", nullable = false)
     RequestStatusType requestStatus = RequestStatusType.PENDING_SERVICE_ACCEPT;

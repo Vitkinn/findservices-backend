@@ -4,11 +4,11 @@ import com.findservices.serviceprovider.common.constants.TranslationConstants;
 import com.findservices.serviceprovider.common.validation.HandleException;
 import com.findservices.serviceprovider.serviceprovider.model.ServiceProviderDto;
 import com.findservices.serviceprovider.serviceprovider.model.ServiceProviderEntity;
+import com.findservices.serviceprovider.user.model.UserDto;
 import com.findservices.serviceprovider.user.model.UserEntity;
 import com.findservices.serviceprovider.user.service.UserService;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
-import org.hibernate.exception.ConstraintViolationException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -68,6 +68,15 @@ public class ServiceProviderService {
             serviceProviderRepository.saveAndFlush(entity);
             return serviceProvider;
         }
+    }
+
+    public List<UserDto> findByNameOrLastName(String searchTerm) {
+        String like = "%".concat(searchTerm).concat("%");
+        return serviceProviderRepository.findByUserNameLikeIgnoreCaseOrUserLastNameLikeIgnoreCase(like, like)
+                .stream()
+                .map(ServiceProviderEntity::getUser)
+                .map(user -> mapper.map(user, UserDto.class))
+                .collect(Collectors.toList());
     }
 
     private HandleException notFoundError() {
