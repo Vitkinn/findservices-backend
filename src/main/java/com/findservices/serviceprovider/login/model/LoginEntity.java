@@ -16,6 +16,9 @@ import java.util.UUID;
 
 
 @Entity(name = "login")
+@Table(uniqueConstraints = {
+        @UniqueConstraint(name = "uk_login_username", columnNames = {"username"})
+})
 @Setter
 @EqualsAndHashCode
 @Getter
@@ -25,7 +28,7 @@ public class LoginEntity implements UserDetails, Serializable {
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
-    @Column(name = "username", unique = true)
+    @Column(name = "username")
     private String username;
 
     @Column(name = "password")

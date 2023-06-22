@@ -19,8 +19,11 @@ public class TokenDto implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private UUID id;
-    private String username;
+    private String login;
     private Instant expiration;
     private String accessToken;
+
+    private String username;
+    private String photoUrl;
     private RoleType role;
 }

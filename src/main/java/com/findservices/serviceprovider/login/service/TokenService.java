@@ -32,7 +32,9 @@ public class TokenService {
                 .expiration(expiresAt)
                 .role(login.getRole())
                 .id(login.getId())
-                .username(login.getUsername())
+                .login(login.getUsername())
+                .username(login.getUser().getName().concat(login.getUser().getLastName()))
+                .photoUrl(login.getUser().getUserPhotoUrl())
                 .build();
     }
 
