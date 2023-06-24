@@ -20,12 +20,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -42,6 +45,9 @@ public class UserService {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Autowired
+    FirebaseService firebaseService;
 
     @Transactional
     public RegisterUserDtoInput createUser(RegisterUserDtoInput registerUserDtoInput) {
@@ -103,7 +109,11 @@ public class UserService {
         return userRepository.findById(id)
                 .map(userEntity -> {
                     final UserDto userDto = new UserDto();
-                    userDto.setPhotoUrl(userEntity.getUserPhotoUrl());
+                    if (userEntity.getUserPhotoUrl() != null) {
+                        final String imageUrl = firebaseService.getImageUrl(userEntity.getUserPhotoUrl());
+                        userDto.setPhotoUrl(imageUrl);
+                    }
+
                     userDto.setName(userEntity.getName());
                     userDto.setLastName(userEntity.getLastName());
                     userDto.setCreateAccountDate(userEntity.getCreateAccountDate());
@@ -135,7 +145,12 @@ public class UserService {
         editUserDto.setName(userEntity.getName());
         editUserDto.setLastName(userEntity.getLastName());
         editUserDto.setLogin(userEntity.getLogin().getUsername());
-        editUserDto.setUserPhotoUrl(userEntity.getUserPhotoUrl());
+
+        if (userEntity.getUserPhotoUrl() == null) {
+            final String imageUrl = firebaseService.getImageUrl(userEntity.getUserPhotoUrl());
+            editUserDto.setUserPhotoUrl(imageUrl);
+        }
+
         editUserDto.setId(userEntity.getId());
         editUserDto.setCpf(userEntity.getCpf());
         return editUserDto;

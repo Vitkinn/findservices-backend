@@ -43,7 +43,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers(
                         "/auth/signin",
-                        "/auth/register"
+                        "/auth/register",
+                        "/api/user/uploadPhoto"
                 ).anonymous()
                 .requestMatchers(
                         "/api/message/**",
