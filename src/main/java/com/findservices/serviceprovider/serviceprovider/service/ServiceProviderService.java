@@ -72,7 +72,10 @@ public class ServiceProviderService {
     }
 
     public List<ServiceProviderListDto> findByFilters(ServiceProviderFilterDto serviceProviderFilterDto) {
-        String like = "%".concat(serviceProviderFilterDto.name).concat("%").toUpperCase();
+        String like = "%";
+        if (serviceProviderFilterDto.name != null) {
+            like = like.concat(serviceProviderFilterDto.name).concat("%").toUpperCase();
+        }
         List<ServiceProviderListTuple> serviceProviders;
         if (serviceProviderFilterDto.category == null && serviceProviderFilterDto.city == null) {
             serviceProviders = serviceProviderRepository.findByUserNameLikeIgnoreCaseOrUserLastNameLikeIgnoreCase(like);

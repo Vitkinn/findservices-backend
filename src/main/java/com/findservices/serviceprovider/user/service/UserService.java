@@ -139,6 +139,14 @@ public class UserService {
                     userDto.setLastName(userEntity.getLastName());
                     userDto.setCreateAccountDate(userEntity.getCreateAccountDate());
                     userDto.setId(userEntity.getId());
+
+                    ServiceProviderEntity serviceProvider = userEntity.getServiceProvider();
+                    if (serviceProvider != null) {
+                        userDto.setCategory(serviceProvider.getCategory());
+                        userDto.setDescription(serviceProvider.getDescription());
+                        userDto.setActuationCities(serviceProvider.getActuationCities().stream().map(CityEntity::getName).collect(Collectors.toSet()));
+                    }
+
                     return userDto;
                 }).orElse(null);
     }

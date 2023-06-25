@@ -16,8 +16,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import static com.findservices.serviceprovider.common.constants.TranslationConstants.ERROR_SERVICE_PROVIDER_NOT_FOUND;
 
@@ -76,15 +79,16 @@ public class ServiceRequestCrudService {
                 translationService.getMessage(TranslationConstants.ERROR_SERVICE_REQUEST_NOT_FOUND), HttpStatus.NOT_FOUND);
     }
 
+    @Transactional
     public void approve(UUID serviceRequestId) {
         this.evaluateBudget(serviceRequestId, RequestStatusType.APPROVED);
     }
 
+    @Transactional
     public void canceled(UUID serviceRequestId) {
         this.evaluateBudget(serviceRequestId, RequestStatusType.CANCELED);
     }
 
-    @Transactional
     void evaluateBudget(UUID serviceRequestId, RequestStatusType status) {
         final ServiceRequestEntity serviceRequest = this.serviceRequestRepository.findById(serviceRequestId)
                 .orElseThrow(this.serviceRequestNotFound());
@@ -133,5 +137,26 @@ public class ServiceRequestCrudService {
 
         serviceRequest.setRequestStatus(RequestStatusType.DONE);
         this.serviceRequestRepository.save(serviceRequest);
+    }
+
+    public ServiceRequestListDto listUserRequests() {
+        List<ServiceRequestDto> myServices = new ArrayList<>();
+        List<ServiceRequestDto> myRequests = new ArrayList<>();
+        UserEntity currentUser = userService.getCurrentUser();
+
+        serviceRequestRepository.findAllByServiceProviderIdOrServiceRequesterId(currentUser.getId(), currentUser.getId())
+                .stream().map(serviceRequest -> mapper.map(serviceRequest, ServiceRequestDto.class))
+                .forEach(serviceRequestDto -> {
+                    if (serviceRequestDto.getServiceProvider().getId() == currentUser.getId()) {
+                        myServices.add(serviceRequestDto);
+                    } else {
+                        myRequests.add(serviceRequestDto);
+                    }
+                });
+
+        ServiceRequestListDto serviceRequestListDto = new ServiceRequestListDto();
+        serviceRequestListDto.myRequests = myRequests;
+        serviceRequestListDto.myServices = myServices;
+        return serviceRequestListDto;
     }
 }

@@ -3,6 +3,7 @@ package com.findservices.serviceprovider.servicerequest.controller;
 import com.findservices.serviceprovider.servicerequest.model.ClientServiceRequestDto;
 import com.findservices.serviceprovider.servicerequest.model.EvaluateRequestDto;
 import com.findservices.serviceprovider.servicerequest.model.ServiceRequestDto;
+import com.findservices.serviceprovider.servicerequest.model.ServiceRequestListDto;
 import com.findservices.serviceprovider.servicerequest.service.ServiceRequestCrudService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
@@ -19,6 +20,11 @@ public class ServiceRequestController {
 
     @Autowired
     ServiceRequestCrudService serviceRequestCrudService;
+
+    @GetMapping
+    public ServiceRequestListDto listRequests() {
+        return serviceRequestCrudService.listUserRequests();
+    }
 
     @PostMapping("/create")
     public ServiceRequestDto createServiceRequest(@RequestBody @Valid ClientServiceRequestDto clientServiceRequestDto) {

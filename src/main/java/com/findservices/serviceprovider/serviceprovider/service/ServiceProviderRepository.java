@@ -16,7 +16,7 @@ public interface ServiceProviderRepository extends JpaRepository<ServiceProvider
 
     // language = sql
     @Query("SELECT DISTINCT " +
-            "sp.description as descrioption, " +
+            "sp.description as description, " +
             "sp.id  as id, " +
             "u.name as name, " +
             "u.lastName as lastName, " +
@@ -31,7 +31,7 @@ public interface ServiceProviderRepository extends JpaRepository<ServiceProvider
             @Param("name") String name, @Param("category") CategoryType category, @Param("city") String city);
 
     @Query("SELECT DISTINCT " +
-            "sp.description as descrioption, " +
+            "sp.description as description, " +
             "sp.id  as id, " +
             "u.name as name, " +
             "u.lastName as lastName, " +
@@ -45,7 +45,7 @@ public interface ServiceProviderRepository extends JpaRepository<ServiceProvider
             @Param("name") String name, @Param("category") CategoryType category);
 
     @Query("SELECT DISTINCT " +
-            "sp.description as descrioption, " +
+            "sp.description as description, " +
             "sp.id  as id, " +
             "u.name as name, " +
             "u.lastName as lastName, " +
@@ -60,7 +60,7 @@ public interface ServiceProviderRepository extends JpaRepository<ServiceProvider
             @Param("name") String name, @Param("city") String city);
 
     @Query("SELECT DISTINCT " +
-            "sp.description as descrioption, " +
+            "sp.description as description, " +
             "sp.id  as id, " +
             "u.name as name, " +
             "u.lastName as lastName, " +

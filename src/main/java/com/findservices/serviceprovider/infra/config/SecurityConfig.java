@@ -49,6 +49,7 @@ public class SecurityConfig {
                 .requestMatchers(
                         "/api/message/**",
                         "/api/serviceRequest/**",
+                        "/api/serviceRequest",
                         "/api/serviceProvider/**",
                         "/api/country/**",
                         "/api/state/**",
