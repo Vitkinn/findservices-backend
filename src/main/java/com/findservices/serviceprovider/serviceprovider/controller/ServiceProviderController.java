@@ -1,6 +1,8 @@
 package com.findservices.serviceprovider.serviceprovider.controller;
 
 import com.findservices.serviceprovider.serviceprovider.model.ServiceProviderDto;
+import com.findservices.serviceprovider.serviceprovider.model.ServiceProviderFilterDto;
+import com.findservices.serviceprovider.serviceprovider.model.ServiceProviderListDto;
 import com.findservices.serviceprovider.serviceprovider.service.ServiceProviderService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
@@ -26,9 +28,9 @@ public class ServiceProviderController {
         return new ResponseEntity<>(serviceProviderService.createServiceProvider(serviceProvider), HttpStatus.CREATED);
     }
 
-    @GetMapping
-    public ResponseEntity<List<ServiceProviderDto>> list() {
-        return new ResponseEntity<>(serviceProviderService.list(), HttpStatus.OK);
+    @PostMapping("search")
+    public ResponseEntity<List<ServiceProviderListDto>> list(@RequestBody ServiceProviderFilterDto serviceProviderFilterDto) {
+        return new ResponseEntity<>(serviceProviderService.findByFilters(serviceProviderFilterDto), HttpStatus.OK);
     }
 
     @GetMapping(path = "/{id}")

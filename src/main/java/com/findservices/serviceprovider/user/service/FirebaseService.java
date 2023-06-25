@@ -26,35 +26,47 @@ public class FirebaseService {
     @Autowired
     private StorageClient storageClient;
 
-    public ImageId uploadFile(MultipartFile multipartFile) throws IOException {
-        String objectName = generateFileName(multipartFile);
+    public ImageId uploadFile(MultipartFile multipartFile) {
+        try {
+            String objectName = generateFileName(multipartFile);
 
-        File file = convertMultiPartToFile(multipartFile);
-        Path filePath = file.toPath();
+            File file = convertMultiPartToFile(multipartFile);
+            Path filePath = file.toPath();
 
-        BlobId blobId = BlobId.of(FirebaseConstants.FIREBASE_BUCKET, objectName);
-        BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType(multipartFile.getContentType()).build();
+            BlobId blobId = BlobId.of(FirebaseConstants.FIREBASE_BUCKET, objectName);
+            BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType(multipartFile.getContentType()).build();
 
-        storageClient.bucket(FIREBASE_BUCKET).getStorage().create(blobInfo, Files.readAllBytes(filePath));
+            storageClient.bucket(FIREBASE_BUCKET).getStorage().create(blobInfo, Files.readAllBytes(filePath));
 
-        file.delete();
-        return new ImageId(blobId.getName());
+            file.delete();
+            return new ImageId(blobId.getName());
+        } catch (Exception e) {
+            return new ImageId(null);
+        }
     }
 
     public void deleteFile(String fileName) {
-        BlobId blobId = BlobId.of(FirebaseConstants.FIREBASE_BUCKET, fileName);
-        storageClient.bucket(FIREBASE_BUCKET).getStorage().delete(blobId);
+        try {
+            BlobId blobId = BlobId.of(FirebaseConstants.FIREBASE_BUCKET, fileName);
+            storageClient.bucket(FIREBASE_BUCKET).getStorage().delete(blobId);
+        } catch (Exception e) {
+
+        }
     }
 
     public String getImageUrl(String fileName) {
-        BlobId blobId = BlobId.of(FirebaseConstants.FIREBASE_BUCKET, fileName);
-        Blob blob = storageClient.bucket(FIREBASE_BUCKET).getStorage().get(blobId);
+        try {
+            BlobId blobId = BlobId.of(FirebaseConstants.FIREBASE_BUCKET, fileName);
+            Blob blob = storageClient.bucket(FIREBASE_BUCKET).getStorage().get(blobId);
 
-        Duration duration = Duration.ofMinutes(5);
+            Duration duration = Duration.ofMinutes(5);
 
-        URL imageUrl = blob.signUrl(duration.toMillis(), TimeUnit.MILLISECONDS);
+            URL imageUrl = blob.signUrl(duration.toMillis(), TimeUnit.MILLISECONDS);
 
-        return imageUrl.getFile();
+            return imageUrl.getFile();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     private File convertMultiPartToFile(MultipartFile file) throws IOException {

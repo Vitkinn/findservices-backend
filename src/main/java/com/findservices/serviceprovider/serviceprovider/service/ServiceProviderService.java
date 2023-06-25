@@ -1,11 +1,12 @@
 package com.findservices.serviceprovider.serviceprovider.service;
 
+import com.findservices.serviceprovider.city.service.CityService;
 import com.findservices.serviceprovider.common.constants.TranslationConstants;
 import com.findservices.serviceprovider.common.validation.HandleException;
-import com.findservices.serviceprovider.serviceprovider.model.ServiceProviderDto;
-import com.findservices.serviceprovider.serviceprovider.model.ServiceProviderEntity;
+import com.findservices.serviceprovider.serviceprovider.model.*;
 import com.findservices.serviceprovider.user.model.UserDto;
 import com.findservices.serviceprovider.user.model.UserEntity;
+import com.findservices.serviceprovider.user.service.FirebaseService;
 import com.findservices.serviceprovider.user.service.UserService;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -33,14 +34,21 @@ public class ServiceProviderService {
     MessageSource messageSource;
     @Autowired
     UserService userService;
+    @Autowired
+    CityService cityService;
+    @Autowired
+    FirebaseService firebaseService;
 
     @Transactional
     public ServiceProviderDto createServiceProvider(ServiceProviderDto serviceProviderDto) {
         ServiceProviderEntity serviceProviderEntity = mapper.map(serviceProviderDto, ServiceProviderEntity.class);
         UserEntity currentUser = userService.getCurrentUser();
         serviceProviderEntity.setId(currentUser.getId());
+        serviceProviderEntity.setActuationCities(cityService.findAllByNames(serviceProviderDto.getActuationCities()));
+
         serviceProviderEntity = serviceProviderRepository.saveAndFlush(serviceProviderEntity);
         serviceProviderDto.setId(serviceProviderEntity.getId());
+
 
         userService.toServiceProvider(currentUser);
         return serviceProviderDto;
@@ -70,13 +78,38 @@ public class ServiceProviderService {
         }
     }
 
-    public List<UserDto> findByNameOrLastName(String searchTerm) {
-        String like = "%".concat(searchTerm).concat("%");
-        return serviceProviderRepository.findByUserNameLikeIgnoreCaseOrUserLastNameLikeIgnoreCase(like, like)
-                .stream()
-                .map(ServiceProviderEntity::getUser)
-                .map(user -> mapper.map(user, UserDto.class))
+    public List<ServiceProviderListDto> findByFilters(ServiceProviderFilterDto serviceProviderFilterDto) {
+        String like = "%".concat(serviceProviderFilterDto.name).concat("%").toUpperCase();
+        List<ServiceProviderListTuple> serviceProviders;
+        if (serviceProviderFilterDto.category == null && serviceProviderFilterDto.city == null) {
+            serviceProviders = serviceProviderRepository.findByUserNameLikeIgnoreCaseOrUserLastNameLikeIgnoreCase(like);
+        } else if (serviceProviderFilterDto.category != null && serviceProviderFilterDto.city != null) {
+            serviceProviders = serviceProviderRepository.findByUserNameLikeIgnoreCaseOrUserLastNameLikeIgnoreCaseAndCategoryAndActuationCitiesName( //
+                            like, serviceProviderFilterDto.category, serviceProviderFilterDto.city);
+        } else if (serviceProviderFilterDto.category != null) {
+            serviceProviders = serviceProviderRepository.findByUserNameLikeIgnoreCaseOrUserLastNameLikeIgnoreCaseAndCategory( //
+                            like, serviceProviderFilterDto.category);
+        } else {
+            serviceProviders = serviceProviderRepository.findByUserNameLikeIgnoreCaseOrUserLastNameLikeIgnoreCaseAndActuationCitiesName( //
+                            like, serviceProviderFilterDto.city);
+        }
+        return serviceProviders
+                .stream() //
+                .map(serviceProvider -> {
+                    UserDto userDto = new UserDto();
+                    userDto.setPhotoUrl(serviceProvider.getPhoto() != null ? firebaseService.getImageUrl(serviceProvider.getPhoto()) : null);
+                    userDto.setName(serviceProvider.getName());
+                    userDto.setLastName(serviceProvider.getLastName());
+
+                    ServiceProviderListDto serviceProviderListDto = new ServiceProviderListDto();
+                    serviceProviderListDto.setUser(userDto);
+                    serviceProviderListDto.setId(serviceProvider.getId());
+                    serviceProviderListDto.setDescription(serviceProvider.getDescription());
+                    serviceProviderListDto.setCategoryType(serviceProvider.getCategory());
+                    return serviceProviderListDto;
+                }) //
                 .collect(Collectors.toList());
+
     }
 
     private HandleException notFoundError() {

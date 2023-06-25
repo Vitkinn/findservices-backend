@@ -4,6 +4,9 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.findservices.serviceprovider.login.model.LoginEntity;
 import com.findservices.serviceprovider.login.model.TokenDto;
+import com.findservices.serviceprovider.user.model.UserEntity;
+import com.findservices.serviceprovider.user.service.FirebaseService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +22,9 @@ public class TokenService {
     @Value("${security.jwt.token.expire-length:3600000}")
     private long validityInMilliseconds = 3600000; // 1h
 
+    @Autowired
+    private FirebaseService firebaseService;
+
     public TokenDto generateToken(LoginEntity login) {
         Instant expiresAt = Instant.now().plus(validityInMilliseconds, ChronoUnit.MILLIS);
         String token = JWT.create()
@@ -27,14 +33,15 @@ public class TokenService {
                 .withExpiresAt(expiresAt)
                 .sign(Algorithm.HMAC256(secretKey));
 
+        UserEntity user = login.getUser();
         return TokenDto.builder()
                 .accessToken(token)
                 .expiration(expiresAt)
                 .role(login.getRole())
                 .id(login.getId())
                 .login(login.getUsername())
-                .username(login.getUser().getName().concat(login.getUser().getLastName()))
-                .photoUrl(login.getUser().getUserPhotoUrl())
+                .username(user.getName().concat(user.getLastName()))
+                .photoUrl(user.getUserPhotoUrl() != null ? firebaseService.getImageUrl(user.getUserPhotoUrl()): null)
                 .build();
     }
 

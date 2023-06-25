@@ -55,7 +55,6 @@ public class SecurityConfig {
                         "/api/city/**",
                         "/api/city/**",
                         "/api/user/**",
-                        "/api/search/**",
                         "/api/user",
                         "/api/profileEvaluation/**",
                         "/api/address",

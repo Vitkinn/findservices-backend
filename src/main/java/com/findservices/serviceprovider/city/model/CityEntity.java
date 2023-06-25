@@ -1,7 +1,6 @@
 package com.findservices.serviceprovider.city.model;
 
 import com.findservices.serviceprovider.common.constants.TranslationConstants;
-import com.findservices.serviceprovider.state.model.StateEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,14 +27,6 @@ public class CityEntity implements Persistable<UUID> {
 
     @Column(nullable = false, name = "name", length = 150)
     String name;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn( //
-            name = "state", //
-            nullable = false, //
-            foreignKey = @ForeignKey(name = TranslationConstants.FK_CITY_STATE_ID) //
-    )
-    StateEntity state;
 
     @Override
     public boolean isNew() {

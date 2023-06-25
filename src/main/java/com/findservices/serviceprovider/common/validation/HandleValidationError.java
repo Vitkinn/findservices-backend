@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -60,7 +61,7 @@ public class HandleValidationError extends ResponseEntityExceptionHandler implem
 
         final ApiError error = ApiError.builder() //
                 .status(HttpStatus.UNAUTHORIZED) //
-                .message("Authentication failed at controller advice") //
+                .message("Usuário ou senha inválidos") //
                 .build();
         return ResponseEntity.status(error.getStatus()).body(error);
     }
@@ -82,6 +83,7 @@ public class HandleValidationError extends ResponseEntityExceptionHandler implem
         ApiError apiError = ApiError.builder()
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .message(ex.getMessage())
+                .errors(Set.of(ExceptionUtils.getStackTrace(ex)))
                 .build();
 
         return new ResponseEntity<>(apiError, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -92,6 +94,7 @@ public class HandleValidationError extends ResponseEntityExceptionHandler implem
         ApiError apiError = ApiError.builder()
                 .status(HttpStatus.FORBIDDEN)
                 .message(ex.getMessage())
+                .errors(Set.of(ExceptionUtils.getStackTrace(ex)))
                 .build();
 
         return new ResponseEntity<>(apiError, HttpStatus.INTERNAL_SERVER_ERROR);
