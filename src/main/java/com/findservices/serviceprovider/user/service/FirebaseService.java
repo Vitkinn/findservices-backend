@@ -2,18 +2,13 @@ package com.findservices.serviceprovider.user.service;
 
 import com.findservices.serviceprovider.common.constants.FirebaseConstants;
 import com.findservices.serviceprovider.user.model.ImageId;
-import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.storage.*;
 import com.google.firebase.cloud.StorageClient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
@@ -24,8 +19,6 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static com.findservices.serviceprovider.common.constants.FirebaseConstants.FIREBASE_BUCKET;
-import static com.findservices.serviceprovider.common.constants.FirebaseConstants.PROJECT_ID;
-import static io.opencensus.contrib.http.util.HttpTraceAttributeConstants.HTTP_METHOD;
 
 @Service
 public class FirebaseService {
@@ -44,7 +37,13 @@ public class FirebaseService {
 
         storageClient.bucket(FIREBASE_BUCKET).getStorage().create(blobInfo, Files.readAllBytes(filePath));
 
+        file.delete();
         return new ImageId(blobId.getName());
+    }
+
+    public void deleteFile(String fileName) {
+        BlobId blobId = BlobId.of(FirebaseConstants.FIREBASE_BUCKET, fileName);
+        storageClient.bucket(FIREBASE_BUCKET).getStorage().delete(blobId);
     }
 
     public String getImageUrl(String fileName) {

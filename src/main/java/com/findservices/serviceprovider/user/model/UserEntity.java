@@ -30,7 +30,7 @@ public class UserEntity implements Persistable<UUID> {
     @Column(nullable = false, name = "name", length = 150)
     String name;
 
-    @Column(nullable = false, name = "last_name", length = 11)
+    @Column(nullable = false, name = "last_name", length = 150)
     String lastName;
 
     @Column(name = "user_photo_url", length = 4000)

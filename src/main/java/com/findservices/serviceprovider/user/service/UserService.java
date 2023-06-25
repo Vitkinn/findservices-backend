@@ -20,13 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -91,6 +85,10 @@ public class UserService {
     @Transactional
     public UpdateUserDto updateUser(UpdateUserDto user) {
         UserEntity currentUser = this.getCurrentUser();
+        if (user.getUserPhotoUrl() != currentUser.getUserPhotoUrl()) {
+            firebaseService.deleteFile(currentUser.getUserPhotoUrl());
+        }
+
         currentUser.setLastName(user.getLastName());
         currentUser.setName(user.getName());
         currentUser.setUserPhotoUrl(user.getUserPhotoUrl());
@@ -146,7 +144,7 @@ public class UserService {
         editUserDto.setLastName(userEntity.getLastName());
         editUserDto.setLogin(userEntity.getLogin().getUsername());
 
-        if (userEntity.getUserPhotoUrl() == null) {
+        if (userEntity.getUserPhotoUrl() != null) {
             final String imageUrl = firebaseService.getImageUrl(userEntity.getUserPhotoUrl());
             editUserDto.setUserPhotoUrl(imageUrl);
         }

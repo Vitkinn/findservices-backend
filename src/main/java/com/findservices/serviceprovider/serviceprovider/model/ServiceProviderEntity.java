@@ -45,6 +45,13 @@ public class ServiceProviderEntity implements Persistable<UUID> {
     @JoinColumn(updatable = false, insertable = false)
     UserEntity user;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "category", nullable = false, length = 30)
+    CategoryType category;
+
+    @Column(name = "description", nullable = false, length = 500)
+    String description;
+
     @Override
     public boolean isNew() {
         return id == null;

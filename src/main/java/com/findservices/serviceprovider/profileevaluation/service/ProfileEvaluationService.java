@@ -3,6 +3,7 @@ package com.findservices.serviceprovider.profileevaluation.service;
 import com.findservices.serviceprovider.profileevaluation.model.ProfileEvaluationRateDto;
 import com.findservices.serviceprovider.profileevaluation.model.ProfileEvaluationEntity;
 import com.findservices.serviceprovider.profileevaluation.model.ProfileEvaluationViewDto;
+import com.findservices.serviceprovider.user.service.FirebaseService;
 import com.findservices.serviceprovider.user.service.UserService;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -27,6 +28,8 @@ public class ProfileEvaluationService {
     ProfileEvaluationRepository repository;
     @Autowired
     UserService userService;
+    @Autowired
+    FirebaseService firebaseService;
 
     @Transactional
     public ProfileEvaluationRateDto evaluateUser(ProfileEvaluationRateDto profileEvaluationDto) {
@@ -60,6 +63,10 @@ public class ProfileEvaluationService {
     public List<ProfileEvaluationViewDto> listByUser(UUID userId) {
         return repository.findAllByRatedUserIdOrderByEvaluationDateDesc(userId).stream() //
                 .map(entity -> modelMapper.map(entity, ProfileEvaluationViewDto.class)) //
+                .peek(user -> {
+                    String imageUrl = firebaseService.getImageUrl(user.getEvaluatorUser().getPhotoUrl());
+                    user.getEvaluatorUser().setPhotoUrl(imageUrl);
+                })
                 .collect(Collectors.toList());
     }
 
