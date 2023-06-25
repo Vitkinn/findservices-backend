@@ -23,10 +23,10 @@ public class ServiceProviderController {
     @Autowired
     ServiceProviderService serviceProviderService;
 
-    @PostMapping
-    public ResponseEntity<ServiceProviderDto> createServiceProvider(@RequestBody @Valid ServiceProviderDto serviceProvider) {
-        return new ResponseEntity<>(serviceProviderService.createServiceProvider(serviceProvider), HttpStatus.CREATED);
-    }
+//    @PostMapping
+//    public ResponseEntity<ServiceProviderDto> createServiceProvider(@RequestBody @Valid ServiceProviderDto serviceProvider) {
+//        return new ResponseEntity<>(serviceProviderService.createServiceProvider(serviceProvider), HttpStatus.CREATED);
+//    }
 
     @PostMapping("search")
     public ResponseEntity<List<ServiceProviderListDto>> list(@RequestBody ServiceProviderFilterDto serviceProviderFilterDto) {

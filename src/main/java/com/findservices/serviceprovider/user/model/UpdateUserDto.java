@@ -1,8 +1,11 @@
 package com.findservices.serviceprovider.user.model;
 
+import com.findservices.serviceprovider.serviceprovider.model.CategoryType;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -25,4 +28,9 @@ public class UpdateUserDto {
     String login;
 
     String phone;
+
+    String cnpj;
+    String description;
+    Set<String> actuationCities;
+    CategoryType category;
 }

@@ -1,13 +1,10 @@
 package com.findservices.serviceprovider.serviceprovider.service;
 
-import com.findservices.serviceprovider.city.service.CityService;
 import com.findservices.serviceprovider.common.constants.TranslationConstants;
 import com.findservices.serviceprovider.common.validation.HandleException;
 import com.findservices.serviceprovider.serviceprovider.model.*;
 import com.findservices.serviceprovider.user.model.UserDto;
-import com.findservices.serviceprovider.user.model.UserEntity;
 import com.findservices.serviceprovider.user.service.FirebaseService;
-import com.findservices.serviceprovider.user.service.UserService;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.modelmapper.ModelMapper;
@@ -33,26 +30,22 @@ public class ServiceProviderService {
     @Autowired
     MessageSource messageSource;
     @Autowired
-    UserService userService;
-    @Autowired
-    CityService cityService;
-    @Autowired
     FirebaseService firebaseService;
 
-    @Transactional
-    public ServiceProviderDto createServiceProvider(ServiceProviderDto serviceProviderDto) {
-        ServiceProviderEntity serviceProviderEntity = mapper.map(serviceProviderDto, ServiceProviderEntity.class);
-        UserEntity currentUser = userService.getCurrentUser();
-        serviceProviderEntity.setId(currentUser.getId());
-        serviceProviderEntity.setActuationCities(cityService.findAllByNames(serviceProviderDto.getActuationCities()));
-
-        serviceProviderEntity = serviceProviderRepository.saveAndFlush(serviceProviderEntity);
-        serviceProviderDto.setId(serviceProviderEntity.getId());
-
-
-        userService.toServiceProvider(currentUser);
-        return serviceProviderDto;
-    }
+//    @Transactional
+//    public ServiceProviderDto createServiceProvider(ServiceProviderDto serviceProviderDto) {
+//        ServiceProviderEntity serviceProviderEntity = mapper.map(serviceProviderDto, ServiceProviderEntity.class);
+//        UserEntity currentUser = userService.getCurrentUser();
+//        serviceProviderEntity.setId(currentUser.getId());
+//        serviceProviderEntity.setActuationCities(cityService.findAllByNames(serviceProviderDto.getActuationCities()));
+//
+//        serviceProviderEntity = serviceProviderRepository.saveAndFlush(serviceProviderEntity);
+//        serviceProviderDto.setId(serviceProviderEntity.getId());
+//
+//
+//        userService.toServiceProvider(currentUser);
+//        return serviceProviderDto;
+//    }
 
     public List<ServiceProviderDto> list() {
         return serviceProviderRepository.findAll().stream() //
@@ -121,5 +114,9 @@ public class ServiceProviderService {
                 ), //
                 HttpStatus.NOT_FOUND //
         );
+    }
+
+    public ServiceProviderEntity save(ServiceProviderEntity serviceProviderEntity) {
+        return serviceProviderRepository.saveAndFlush(serviceProviderEntity);
     }
 }
