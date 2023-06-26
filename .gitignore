@@ -13,7 +13,6 @@ create.sql
 .settings
 .springBeans
 .sts4-cache
-src/main/resources/firebase.json
 
 ### IntelliJ IDEA ###
 .idea

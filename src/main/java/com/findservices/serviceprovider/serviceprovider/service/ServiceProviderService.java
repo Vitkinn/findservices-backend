@@ -32,21 +32,6 @@ public class ServiceProviderService {
     @Autowired
     FirebaseService firebaseService;
 
-//    @Transactional
-//    public ServiceProviderDto createServiceProvider(ServiceProviderDto serviceProviderDto) {
-//        ServiceProviderEntity serviceProviderEntity = mapper.map(serviceProviderDto, ServiceProviderEntity.class);
-//        UserEntity currentUser = userService.getCurrentUser();
-//        serviceProviderEntity.setId(currentUser.getId());
-//        serviceProviderEntity.setActuationCities(cityService.findAllByNames(serviceProviderDto.getActuationCities()));
-//
-//        serviceProviderEntity = serviceProviderRepository.saveAndFlush(serviceProviderEntity);
-//        serviceProviderDto.setId(serviceProviderEntity.getId());
-//
-//
-//        userService.toServiceProvider(currentUser);
-//        return serviceProviderDto;
-//    }
-
     public List<ServiceProviderDto> list() {
         return serviceProviderRepository.findAll().stream() //
                 .map(entity -> mapper.map(entity, ServiceProviderDto.class)) //

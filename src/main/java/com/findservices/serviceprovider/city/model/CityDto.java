@@ -1,14 +1,11 @@
 package com.findservices.serviceprovider.city.model;
 
 import com.findservices.serviceprovider.common.model.BaseDto;
-import com.findservices.serviceprovider.state.model.StateDto;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,8 +18,5 @@ public class CityDto extends BaseDto {
     @NotNull
     @Size(max = 150)
     String name;
-
-    @NotNull
-    StateDto state;
 
 }
