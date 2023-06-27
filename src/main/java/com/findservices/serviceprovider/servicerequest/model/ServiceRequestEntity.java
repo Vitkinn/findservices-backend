@@ -8,6 +8,7 @@ import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.domain.Persistable;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -39,6 +40,9 @@ public class ServiceRequestEntity implements Persistable<UUID> {
 
     @Column(name = "title", length = 150)
     String title;
+
+    @Column(name = "create_date")
+    LocalDate createDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "request_status", nullable = false)
