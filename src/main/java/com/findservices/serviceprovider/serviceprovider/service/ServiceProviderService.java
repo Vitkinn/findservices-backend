@@ -5,6 +5,7 @@ import com.findservices.serviceprovider.common.validation.HandleException;
 import com.findservices.serviceprovider.serviceprovider.model.*;
 import com.findservices.serviceprovider.user.model.UserDto;
 import com.findservices.serviceprovider.user.service.FirebaseService;
+import com.findservices.serviceprovider.user.service.UserService;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.modelmapper.ModelMapper;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -31,6 +33,8 @@ public class ServiceProviderService {
     MessageSource messageSource;
     @Autowired
     FirebaseService firebaseService;
+    @Autowired
+    UserService userService;
 
     public List<ServiceProviderDto> list() {
         return serviceProviderRepository.findAll().stream() //
@@ -76,6 +80,7 @@ public class ServiceProviderService {
         }
         return serviceProviders
                 .stream() //
+                .filter(tuple -> !Objects.equals(tuple.getId(), userService.getCurrentUser().getId()))
                 .map(serviceProvider -> {
                     UserDto userDto = new UserDto();
                     userDto.setPhotoUrl(serviceProvider.getPhoto() != null ? firebaseService.getImageUrl(serviceProvider.getPhoto()) : null);

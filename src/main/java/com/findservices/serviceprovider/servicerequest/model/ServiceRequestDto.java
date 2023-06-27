@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Data
@@ -20,6 +21,7 @@ public class ServiceRequestDto {
     String title;
     String valueJustification;
     RequestStatusType requestStatus;
+    LocalDate createDate;
     UserDto serviceProvider;
     UserDto serviceRequester;
 
