@@ -40,7 +40,7 @@ public class TokenService {
                 .role(login.getRole())
                 .id(login.getId())
                 .login(login.getUsername())
-                .username(user.getName().concat(user.getLastName()))
+                .username(user.getName().concat(" ").concat(user.getLastName()))
                 .photoUrl(user.getUserPhotoUrl() != null ? firebaseService.getImageUrl(user.getUserPhotoUrl()): null)
                 .build();
     }

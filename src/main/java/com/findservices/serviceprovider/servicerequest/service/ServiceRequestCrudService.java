@@ -48,6 +48,7 @@ public class ServiceRequestCrudService {
 
         serviceRequest.setServiceProvider(userServiceProvider);
         serviceRequest.setServiceRequester(userService.getCurrentUser());
+        serviceRequest.setValue(null);
 
         serviceRequest = serviceRequestRepository.saveAndFlush(serviceRequest);
 
