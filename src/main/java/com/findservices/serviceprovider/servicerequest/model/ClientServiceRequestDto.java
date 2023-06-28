@@ -20,6 +20,9 @@ public class ClientServiceRequestDto {
     @NotNull
     String serviceDescription;
 
+    @NotNull
+    String title;
+
     Double clientWishValue;
 
     @NotNull @Valid

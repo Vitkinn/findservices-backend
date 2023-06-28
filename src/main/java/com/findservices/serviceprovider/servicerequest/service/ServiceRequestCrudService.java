@@ -112,7 +112,7 @@ public class ServiceRequestCrudService {
     }
 
     private void validateServiceProviderOwner(ServiceRequestEntity serviceRequest) {
-        if (serviceRequest.getServiceProvider() != userService.getCurrentUser()) {
+        if (!serviceRequest.getServiceProvider().getId().equals(userService.getCurrentUser().getId())) {
             throw new HandleException( //
                     translationService.getMessage("Esta ordem de serviço não pertence a este prestador de serviço"), //
                     HttpStatus.FORBIDDEN //

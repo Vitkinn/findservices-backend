@@ -23,6 +23,8 @@ public class UpdateUserDto {
 
     String userPhotoUrl;
 
+    String userPhotoName;
+
     String cpf;
 
     String login;

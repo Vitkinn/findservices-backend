@@ -2,10 +2,10 @@ package com.findservices.serviceprovider.serviceprovider.service;
 
 import com.findservices.serviceprovider.common.constants.TranslationConstants;
 import com.findservices.serviceprovider.common.validation.HandleException;
+import com.findservices.serviceprovider.login.service.AuthService;
 import com.findservices.serviceprovider.serviceprovider.model.*;
 import com.findservices.serviceprovider.user.model.UserDto;
 import com.findservices.serviceprovider.user.service.FirebaseService;
-import com.findservices.serviceprovider.user.service.UserService;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.modelmapper.ModelMapper;
@@ -34,7 +34,7 @@ public class ServiceProviderService {
     @Autowired
     FirebaseService firebaseService;
     @Autowired
-    UserService userService;
+    AuthService authService;
 
     public List<ServiceProviderDto> list() {
         return serviceProviderRepository.findAll().stream() //
@@ -80,7 +80,7 @@ public class ServiceProviderService {
         }
         return serviceProviders
                 .stream() //
-                .filter(tuple -> !Objects.equals(tuple.getId(), userService.getCurrentUser().getId()))
+                .filter(tuple -> !Objects.equals(tuple.getId(), authService.getLogin().getId()))
                 .map(serviceProvider -> {
                     UserDto userDto = new UserDto();
                     userDto.setPhotoUrl(serviceProvider.getPhoto() != null ? firebaseService.getImageUrl(serviceProvider.getPhoto()) : null);

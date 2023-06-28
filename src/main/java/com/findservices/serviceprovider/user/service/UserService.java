@@ -178,6 +178,7 @@ public class UserService {
         if (userEntity.getUserPhotoUrl() != null) {
             final String imageUrl = firebaseService.getImageUrl(userEntity.getUserPhotoUrl());
             editUserDto.setUserPhotoUrl(imageUrl);
+            editUserDto.setUserPhotoName(userEntity.getUserPhotoUrl());
         }
 
         ServiceProviderEntity serviceProvider = userEntity.getServiceProvider();

@@ -31,28 +31,28 @@ public class ServiceRequestController {
         return serviceRequestCrudService.createServiceRequest(clientServiceRequestDto);
     }
 
-    @PutMapping("/evaluate")
-    public ServiceRequestDto evaluateServiceRequest(@RequestParam UUID id, @RequestBody @Valid EvaluateRequestDto evaluateRequestDto) {
+    @PutMapping("/evaluate/{id}")
+    public ServiceRequestDto evaluateServiceRequest(@PathVariable(name = "id") UUID id, @RequestBody @Valid EvaluateRequestDto evaluateRequestDto) {
         return serviceRequestCrudService.evaluateRequest(id, evaluateRequestDto);
     }
 
-    @PutMapping("/rejectService")
-    public void rejectService(@RequestParam UUID id) {
+    @PutMapping("/rejectService/{id}")
+    public void rejectService(@PathVariable(name = "id") UUID id) {
         serviceRequestCrudService.rejectService(id);
     }
 
-    @PutMapping("/accept")
-    public void accept(@RequestParam UUID id) {
+    @PutMapping("/accept/{id}")
+    public void accept(@PathVariable(name = "id") UUID id) {
         serviceRequestCrudService.approve(id);
     }
 
-    @PutMapping("/canceled")
-    public void canceled(@RequestParam UUID id) {
+    @PutMapping("/canceled/{id}")
+    public void canceled(@PathVariable(name = "id") UUID id) {
         serviceRequestCrudService.canceled(id);
     }
 
-    @PutMapping("/finish")
-    public void finish(@RequestParam UUID id) {
+    @PutMapping("/finish/{id}")
+    public void finish(@PathVariable(name = "id") UUID id) {
         serviceRequestCrudService.finish(id);
     }
 
